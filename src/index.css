@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* === Base === */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply text-gray-900 bg-cream-50;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', 'Georgia', serif;
+  }
+}
+
+/* === Scroll bar === */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { @apply bg-cream-100; }
+::-webkit-scrollbar-thumb { @apply bg-cinnamon-300 rounded-full; }
+::-webkit-scrollbar-thumb:hover { @apply bg-cinnamon-500; }
+
+/* === Selection === */
+::selection { @apply bg-cinnamon-200 text-cinnamon-900; }
+
+/* === Focus visible === */
+:focus-visible { outline: 2px solid #B45309; outline-offset: 2px; }
+
+/* === Swiper overrides === */
+.swiper-pagination-bullet-active { @apply bg-cinnamon-600 !important; }
+.swiper-button-next, .swiper-button-prev { @apply text-cinnamon-700 !important; }
+
+/* === Animations === */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0e6d8 25%, #faf5ef 50%, #f0e6d8 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* === Prose adjustments === */
+.prose p { @apply text-gray-600; }
+.prose strong { @apply text-cinnamon-900; }
