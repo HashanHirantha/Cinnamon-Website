@@ -23,12 +23,75 @@ const Field = ({ icon: Icon, type = 'text', placeholder, value, onChange, rightE
 
 // ─── Panel variants ───────────────────────────────────────────────────────────
 const formVariants = {
-    enter: (dir) => ({ opacity: 0, x: dir > 0 ? 60 : -60 }),
-    center: { opacity: 1, x: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
-    exit: (dir) => ({ opacity: 0, x: dir > 0 ? -60 : 60, transition: { duration: 0.3 } }),
+    enter: (dir) => ({ opacity: 0, x: dir > 0 ? 80 : -80 }),
+    center: { opacity: 1, x: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } },
+    exit: (dir) => ({ opacity: 0, x: dir > 0 ? -80 : 80, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } }),
 };
 
+// ─── Cinnamon background decoration ─────────────────────────────────────────
+import img1 from '../assets/auth/cinnamon-sticks-powder.jpg';
+import img2 from '../assets/auth/cinnamon-bag-lavender.jpg';
+import img3 from '../assets/auth/cinnamon-bowl-leaves.jpg';
+import img4 from '../assets/auth/anotherone.jpg';
+
+const BgDecor = () => (
+    <>
+        {/* Deep ambient glow */}
+        <div className="absolute top-[-80px] left-[-80px] w-96 h-96 rounded-full bg-cinnamon-700/20 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-[-60px] right-[-60px] w-96 h-96 rounded-full bg-amber-800/20 blur-3xl pointer-events-none" />
+
+        {/* ── Photo 1: sticks & star anise & powder (flat lay) — top-left ── */}
+        <motion.div
+            animate={{ y: [0, -14, 0], rotate: [-6, -3, -6] }}
+            transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute top-6 left-4 w-56 h-40 rounded-2xl overflow-hidden shadow-2xl pointer-events-none"
+            style={{ opacity: 0.6 }}
+        >
+            <img src={img1} alt="" className="w-full h-full object-cover"
+                style={{ filter: 'sepia(25%) saturate(1.3) brightness(0.72)' }} />
+            <div className="absolute inset-0" style={{ background: 'rgba(110,45,8,0.32)', mixBlendMode: 'multiply' }} />
+        </motion.div>
+
+        {/* ── Photo 2: cinnamon bag with lavender — bottom-right ── */}
+        <motion.div
+            animate={{ y: [0, 18, 0], rotate: [7, 3, 7] }}
+            transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
+            className="absolute bottom-8 right-4 w-52 h-48 rounded-2xl overflow-hidden shadow-2xl pointer-events-none"
+            style={{ opacity: 0.55 }}
+        >
+            <img src={img2} alt="" className="w-full h-full object-cover"
+                style={{ filter: 'sepia(35%) saturate(1.3) brightness(0.68)' }} />
+            <div className="absolute inset-0" style={{ background: 'rgba(100,38,5,0.38)', mixBlendMode: 'multiply' }} />
+        </motion.div>
+
+        {/* ── Photo 3: powder bowl, leaves & jar — bottom-left ── */}
+        <motion.div
+            animate={{ y: [0, -12, 0], x: [0, 5, 0], rotate: [4, 8, 4] }}
+            transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
+            className="absolute bottom-10 left-5 w-48 h-40 rounded-2xl overflow-hidden shadow-2xl pointer-events-none"
+            style={{ opacity: 0.5 }}
+        >
+            <img src={img3} alt="" className="w-full h-full object-cover"
+                style={{ filter: 'sepia(30%) saturate(1.4) brightness(0.70)' }} />
+            <div className="absolute inset-0" style={{ background: 'rgba(120,55,8,0.33)', mixBlendMode: 'multiply' }} />
+        </motion.div>
+
+        {/* ── Photo 4: anotherone — top-right ── */}
+        <motion.div
+            animate={{ y: [0, -16, 0], rotate: [-4, -9, -4] }}
+            transition={{ duration: 8.5, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+            className="absolute top-6 right-4 w-52 h-40 rounded-2xl overflow-hidden shadow-2xl pointer-events-none"
+            style={{ opacity: 0.55 }}
+        >
+            <img src={img4} alt="" className="w-full h-full object-cover"
+                style={{ filter: 'sepia(28%) saturate(1.35) brightness(0.70)' }} />
+            <div className="absolute inset-0" style={{ background: 'rgba(105,42,6,0.34)', mixBlendMode: 'multiply' }} />
+        </motion.div>
+    </>
+);
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
+
 const Login = () => {
     const navigate = useNavigate();
     const [mode, setMode] = useState('signin'); // 'signin' | 'signup'
@@ -62,7 +125,9 @@ const Login = () => {
     const panelRight = mode === 'signin';
 
     return (
-        <div className="min-h-screen bg-cinnamon-950 flex items-center justify-center px-4">
+        <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden"
+            style={{ background: 'radial-gradient(ellipse at 30% 50%, #3d1a0a 0%, #1a0a04 40%, #0f0703 100%)' }}>
+            <BgDecor />
             {/* Card container */}
             <div className="relative w-full max-w-4xl min-h-[580px] bg-white rounded-3xl shadow-2xl overflow-hidden flex">
 
@@ -189,7 +254,7 @@ const Login = () => {
                 {/* ── Coloured morph panel ── */}
                 <motion.div
                     layout
-                    transition={{ type: 'spring', stiffness: 260, damping: 28 }}
+                    transition={{ type: 'spring', stiffness: 140, damping: 22, mass: 1.1 }}
                     className="relative w-1/2 flex flex-col items-center justify-center px-10 py-12 overflow-hidden"
                     style={{ order: panelRight ? 2 : 1 }}
                 >

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, Search, User, Menu, X, Heart } from 'lucide-react';
 import { useCart } from '../context/CartContext';
@@ -21,12 +21,18 @@ const Navbar = () => {
     const { cartCount } = useCart();
     const { wishlist } = useWishlist();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Only the home page gets the transparent-until-scroll treatment
+    const isHome = location.pathname === '/';
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 40);
         window.addEventListener('scroll', onScroll, { passive: true });
+        // Reset on route change
+        setScrolled(window.scrollY > 40);
         return () => window.removeEventListener('scroll', onScroll);
-    }, []);
+    }, [location.pathname]);
 
     // Close mobile on resize
     useEffect(() => {
@@ -50,14 +56,20 @@ const Navbar = () => {
         }
     };
 
-    const navbarBg = scrolled
-        ? 'bg-white/95 backdrop-blur-md shadow-md'
-        : 'bg-transparent';
+    // ── Navbar appearance logic ──
+    // Home page: transparent → white on scroll
+    // Inner pages: always solid cinnamon-brown
+    const navbarBg = isHome
+        ? (scrolled ? 'bg-white/95 backdrop-blur-md shadow-md' : 'bg-transparent')
+        : 'bg-cinnamon-900/95 backdrop-blur-md shadow-lg';
 
-    const logoColor = scrolled ? 'text-cinnamon-900' : 'text-white';
-    const linkColor = scrolled ? 'text-gray-700 hover:text-cinnamon-700' : 'text-white/90 hover:text-white';
-    const iconColor = scrolled ? 'text-gray-700 hover:text-cinnamon-700' : 'text-white hover:text-cream-300';
-    const borderColor = scrolled ? 'border-cream-200' : 'border-white/20';
+    const logoColor = (isHome && !scrolled) ? 'text-white' : (isHome ? 'text-cinnamon-900' : 'text-cream-100');
+    const linkColor = (isHome && !scrolled)
+        ? 'text-white/90 hover:text-white'
+        : (isHome ? 'text-gray-700 hover:text-cinnamon-700' : 'text-cream-200 hover:text-amber-300');
+    const iconColor = (isHome && !scrolled)
+        ? 'text-white hover:text-cream-300'
+        : (isHome ? 'text-gray-700 hover:text-cinnamon-700' : 'text-cream-200 hover:text-amber-300');
 
     return (
         <>
