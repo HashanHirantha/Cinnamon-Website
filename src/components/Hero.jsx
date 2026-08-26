@@ -26,11 +26,7 @@ const slideVariants = {
         center: { opacity: 1, x: 0, transition: { duration: 1.0, ease: [0.25, 0.46, 0.45, 0.94] } },
         exit: { opacity: 0, x: '30%', transition: { duration: 0.8, ease: 'easeIn' } },
     },
-    blur: {
-        enter: { opacity: 0, filter: 'blur(18px)', scale: 1.04 },
-        center: { opacity: 1, filter: 'blur(0px)', scale: 1, transition: { duration: 1.3, ease: 'easeOut' } },
-        exit: { opacity: 0, filter: 'blur(10px)', scale: 1.02, transition: { duration: 0.8, ease: 'easeIn' } },
-    },
+    
 };
 
 // ─── Decorative floating element ────────────────────────────────────────────
@@ -40,7 +36,6 @@ const FloatingSpice = ({ className, delay = 0, duration = 6 }) => (
         animate={{ y: [0, -18, 0], rotate: [0, 10, -5, 0] }}
         transition={{ duration, delay, repeat: Infinity, ease: 'easeInOut' }}
     >
-        <Leaf className="w-8 h-8 text-cream-200" />
     </motion.div>
 );
 
@@ -227,7 +222,7 @@ const Hero = () => {
             </div>
 
             {/* ── Slide label ── */}
-            <AnimatePresence mode="wait">
+            {/* <AnimatePresence mode="wait">
                 <motion.p
                     key={current}
                     initial={{ opacity: 0, y: 6 }}
@@ -238,7 +233,7 @@ const Hero = () => {
                 >
                     {slides[current].label}
                 </motion.p>
-            </AnimatePresence>
+            </AnimatePresence> */}
 
             {/* ── Scroll hint ── */}
             <motion.div
