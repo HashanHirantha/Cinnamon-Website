@@ -1,6 +1,6 @@
 import Hero from '../components/Hero';
 import CinnamonStory from '../components/CinnamonStory';
-import FeaturedProducts from '../components/FeaturedProducts';
+import MorphShowcase from '../components/MorphShowcase';
 import ProductCategories from '../components/ProductCategories';
 import WhyCeylon from '../components/WhyCeylon';
 import CinnamonJourney from '../components/CinnamonJourney';
@@ -13,7 +13,7 @@ const Home = () => {
         <main>
             <Hero />
             <CinnamonStory />
-            <FeaturedProducts />
+            <MorphShowcase />
             <ProductCategories />
             <WhyCeylon />
             <CinnamonJourney />
