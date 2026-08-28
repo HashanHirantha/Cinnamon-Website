@@ -1,8 +1,9 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ToastProvider } from './components/Toast';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import BackToTop from './components/BackToTop';
@@ -32,6 +33,16 @@ const PageWrapper = ({ children }) => (
     </motion.div>
 );
 
+// Protected route — redirects unauthenticated users to /login
+const ProtectedRoute = ({ children }) => {
+    const { user } = useAuth();
+    const location = useLocation();
+    if (!user) {
+        return <Navigate to="/login" state={{ from: location.pathname }} replace />;
+    }
+    return children;
+};
+
 // Routing with transitions
 const AppRoutes = () => {
     const location = useLocation();
@@ -47,7 +58,7 @@ const AppRoutes = () => {
                     <Route path="/shop" element={<PageWrapper><Shop /></PageWrapper>} />
                     <Route path="/shop/:slug" element={<PageWrapper><ProductDetails /></PageWrapper>} />
                     <Route path="/cart" element={<PageWrapper><Cart /></PageWrapper>} />
-                    <Route path="/checkout" element={<PageWrapper><Checkout /></PageWrapper>} />
+                    <Route path="/checkout" element={<ProtectedRoute><PageWrapper><Checkout /></PageWrapper></ProtectedRoute>} />
                     <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
                     <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
                     <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
@@ -66,13 +77,15 @@ const AppRoutes = () => {
 const App = () => {
     return (
         <BrowserRouter>
-            <CartProvider>
-                <WishlistProvider>
-                    <ToastProvider>
-                        <AppRoutes />
-                    </ToastProvider>
-                </WishlistProvider>
-            </CartProvider>
+            <AuthProvider>
+                <CartProvider>
+                    <WishlistProvider>
+                        <ToastProvider>
+                            <AppRoutes />
+                        </ToastProvider>
+                    </WishlistProvider>
+                </CartProvider>
+            </AuthProvider>
         </BrowserRouter>
     );
 };

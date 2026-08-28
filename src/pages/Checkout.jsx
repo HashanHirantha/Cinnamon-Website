@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Shield, CheckCircle, CreditCard } from 'lucide-react';
+import { Shield, CheckCircle, CreditCard, AlertCircle } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { toast } from '../components/Toast';
 
@@ -12,6 +12,7 @@ const Checkout = () => {
     const [step, setStep] = useState(0);
     const [orderPlaced, setOrderPlaced] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [formError, setFormError] = useState('');
 
     const shipping = cartTotal >= 50 ? 0 : 8.99;
     const grandTotal = cartTotal + shipping;
@@ -25,6 +26,24 @@ const Checkout = () => {
     const handleInput = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
     const nextStep = () => {
+        // Validate fields for the current step
+        if (step === 0) {
+            if (!form.fullName.trim() || !form.email.trim() || !form.phone.trim()) {
+                setFormError('Please fill in all customer information fields.');
+                return;
+            }
+        } else if (step === 1) {
+            if (!form.address.trim() || !form.city.trim() || !form.postalCode.trim() || !form.country.trim()) {
+                setFormError('Please fill in all shipping address fields.');
+                return;
+            }
+        } else if (step === 2) {
+            if (!form.cardNumber.trim() || !form.expiry.trim() || !form.cvv.trim() || !form.cardName.trim()) {
+                setFormError('Please fill in all payment details.');
+                return;
+            }
+        }
+        setFormError('');
         if (step < steps.length - 1) setStep(s => s + 1);
         else placeOrder();
     };
@@ -223,11 +242,19 @@ const Checkout = () => {
                                 )}
                             </motion.div>
 
+                            {/* Validation error */}
+                            {formError && (
+                                <div className="flex items-center gap-2 mt-6 text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+                                    <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                                    {formError}
+                                </div>
+                            )}
+
                             {/* Navigation */}
-                            <div className="flex items-center justify-between mt-8 pt-6 border-t border-cream-200">
+                            <div className="flex items-center justify-between mt-6 pt-6 border-t border-cream-200">
                                 {step > 0 ? (
                                     <button
-                                        onClick={() => setStep(s => s - 1)}
+                                        onClick={() => { setStep(s => s - 1); setFormError(''); }}
                                         className="px-6 py-3 text-sm font-medium text-cinnamon-700 border border-cinnamon-200 rounded-xl hover:bg-cinnamon-50 transition-colors"
                                     >
                                         ← Back
