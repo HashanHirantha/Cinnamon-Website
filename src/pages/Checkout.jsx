@@ -57,7 +57,7 @@ const Checkout = () => {
                         <CheckCircle className="w-10 h-10 text-green-500" />
                     </div>
                     <h2 className="font-serif text-3xl font-bold text-cinnamon-900 mb-3">Order Confirmed!</h2>
-                    <p className="text-gray-500 mb-2">Thank you for shopping with CEYLONÉ.</p>
+                    <p className="text-gray-500 mb-2">Thank you for shopping with PURE GOLD Products.</p>
                     <p className="text-gray-500 mb-8">Your premium Ceylon cinnamon is being prepared with care. A confirmation email will be sent to you shortly.</p>
                     <div className="bg-cinnamon-50 rounded-2xl p-4 mb-8 text-left">
                         <p className="text-sm text-cinnamon-800 font-medium">Order Reference: <span className="font-bold">CCE-{Math.floor(Math.random() * 90000) + 10000}</span></p>

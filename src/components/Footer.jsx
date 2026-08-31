@@ -53,7 +53,7 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
                     {/* Brand */}
                     <div className="lg:col-span-1">
-                        <span className="font-serif text-3xl font-bold text-cream-100 tracking-widest">CEYLONÉ</span>
+                        <span className="font-serif text-2xl sm:text-3xl font-bold text-cream-100 tracking-wider">PURE GOLD <span className="text-gold-400">Products</span></span>
                         <p className="text-xs text-cinnamon-400 tracking-widest uppercase mt-1 mb-4">Pure Ceylon Cinnamon</p>
                         <p className="text-sm text-cream-100/60 leading-relaxed mb-6">
                             Bringing the finest authentic Ceylon cinnamon from the lush gardens of Sri Lanka to your home.
@@ -147,7 +147,7 @@ const Footer = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
                         <p className="text-xs text-cream-100/50 text-center">
-                            © {new Date().getFullYear()} CEYLONÉ. All rights reserved. Made with pride in Sri Lanka 🇱🇰
+                            © {new Date().getFullYear()} PURE GOLD Products. All rights reserved. Made with pride in Sri Lanka 🇱🇰
                         </p>
                         <div className="flex items-center gap-4">
                             <Link to="/privacy" className="text-xs text-cream-100/50 hover:text-cream-100/80 transition-colors">Privacy</Link>

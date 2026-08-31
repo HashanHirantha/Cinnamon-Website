@@ -68,7 +68,7 @@ const CinnamonStory = () => {
                                 <em>Cinnamomum verum</em>) is known for its delicately sweet, complex flavour and paper-thin layers of bark.
                             </p>
                             <p>
-                                At CEYLONÉ, we work directly with generations of skilled cinnamon peelers — known as <strong className="text-cinnamon-800">chalias</strong> — in the gardens of Galle, Matara, and Kurunegala. Their hands still shape each quill with the same techniques passed down through centuries.
+                                At PURE GOLD Products, we work directly with generations of skilled cinnamon peelers — known as <strong className="text-cinnamon-800">chalias</strong> — in the gardens of Galle, Matara, and Kurunegala. Their hands still shape each quill with the same techniques passed down through centuries.
                             </p>
                             <p>
                                 From cultivation under the dappled shade of Sri Lanka's tropical forests to careful sun-drying and hand-sorting, every step honours the land and the craft.

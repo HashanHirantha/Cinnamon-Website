@@ -141,7 +141,7 @@ const Shop = () => {
             {/* Page header */}
             <div className="bg-cinnamon-900 py-14">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <p className="text-cinnamon-400 text-sm font-medium uppercase tracking-widest mb-2">CEYLONÉ Collection</p>
+                    <p className="text-cinnamon-400 text-sm font-medium uppercase tracking-widest mb-2">PURE GOLD Products Collection</p>
                     <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white mb-3">Shop Ceylon Cinnamon</h1>
                     <p className="text-cream-200/70 text-base">Premium, authentic, and naturally sourced from Sri Lanka</p>
                     {/* Breadcrumb */}

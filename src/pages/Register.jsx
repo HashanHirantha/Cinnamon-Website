@@ -26,7 +26,7 @@ const Register = () => {
                 className="bg-white rounded-3xl shadow-2xl p-8 sm:p-10 w-full max-w-md"
             >
                 <div className="text-center mb-8">
-                    <Link to="/" className="font-serif text-3xl font-bold text-cinnamon-900 tracking-widest">CEYLONÉ</Link>
+                    <Link to="/" className="font-serif text-2xl font-bold text-cinnamon-900 tracking-wider">PURE GOLD <span className="text-gold-500">Products</span></Link>
                     <p className="text-sm text-gray-500 mt-2">Create your account</p>
                 </div>
 

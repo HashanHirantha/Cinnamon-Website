@@ -26,7 +26,7 @@ const ProductShowcase = () => {
                             <span className="text-cinnamon-600"> Sri Lanka</span> Home
                         </h2>
                         <p className="text-gray-600 text-lg leading-relaxed mb-8">
-                            Each CEYLONÉ product carries within it the warmth of the Sri Lankan sun, the scent of tropical gardens, and the heritage of a culture that has perfected the art of cinnamon for over 2000 years.
+                            Each PURE GOLD product carries within it the warmth of the Sri Lankan sun, the scent of tropical gardens, and the heritage of a culture that has perfected the art of cinnamon for over 2000 years.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4">
                             <Link
@@ -69,7 +69,7 @@ const ProductShowcase = () => {
                         >
                             <img
                                 src={IMAGES.showcase}
-                                alt="Premium CEYLONÉ cinnamon product"
+                                alt="Premium PURE GOLD cinnamon product"
                                 className="w-full h-full object-cover"
                                 loading="lazy"
                             />

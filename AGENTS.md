@@ -1,4 +1,4 @@
-# CEYLONÉ — Ceylon Cinnamon E-Commerce Website
+# PURE GOLD Products — Ceylon Cinnamon E-Commerce Website
 
 > **AI Assistant Context File** — Read this before making any changes to the project.
 
@@ -6,7 +6,7 @@
 
 ## Project Overview
 
-**CEYLONÉ** is a premium e-commerce website for authentic Ceylon Cinnamon products sourced directly from Sri Lanka. The brand positions itself as a luxury, heritage-driven cinnamon exporter targeting health-conscious consumers, chefs, Ayurvedic practitioners, and corporate gift buyers worldwide.
+**PURE GOLD Products** is a premium e-commerce website for authentic Ceylon Cinnamon products sourced directly from Sri Lanka. The brand positions itself as a luxury, heritage-driven cinnamon exporter targeting health-conscious consumers, chefs, Ayurvedic practitioners, and corporate gift buyers worldwide.
 
 ### Business Domain
 - **Product**: Premium Ceylon Cinnamon (Cinnamomum verum) — quills, powder, tea, essential oils, and gift sets

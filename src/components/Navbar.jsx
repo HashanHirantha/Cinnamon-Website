@@ -69,9 +69,9 @@ const Navbar = () => {
                         {/* Logo */}
                         <Link
                             to="/"
-                            className={`font-serif text-2xl font-bold tracking-widest transition-colors duration-300 ${logoColor}`}
+                            className={`font-serif text-xl sm:text-2xl font-bold tracking-wider transition-colors duration-300 ${logoColor}`}
                         >
-                            CEYLONÉ
+                            PURE GOLD <span className={scrolled ? 'text-cinnamon-600' : 'text-gold-400'}>Products</span>
                             <span className={`block text-[10px] font-sans font-normal tracking-[0.2em] uppercase mt-[-4px] transition-colors ${scrolled ? 'text-cinnamon-500' : 'text-white/70'}`}>
                                 Pure Ceylon Cinnamon
                             </span>
@@ -199,7 +199,7 @@ const Navbar = () => {
                         >
                             {/* Header */}
                             <div className="flex items-center justify-between px-6 py-5 border-b border-cream-200">
-                                <span className="font-serif text-xl font-bold text-cinnamon-900 tracking-widest">CEYLONÉ</span>
+                                <span className="font-serif text-lg font-bold text-cinnamon-900 tracking-wider">PURE GOLD Products</span>
                                 <button
                                     onClick={() => setMobileOpen(false)}
                                     aria-label="Close menu"
