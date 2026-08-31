@@ -20,6 +20,16 @@ import Account from './pages/Account';
 import CeylonCinnamon from './pages/CeylonCinnamon';
 import NotFound from './pages/NotFound';
 
+// Admin
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminLogin from './pages/admin/AdminLogin';
+import Dashboard from './pages/admin/Dashboard';
+import AdminProducts from './pages/admin/AdminProducts';
+import AdminOrders from './pages/admin/AdminOrders';
+import AdminCustomers from './pages/admin/AdminCustomers';
+import AdminReviews from './pages/admin/AdminReviews';
+import AdminSettings from './pages/admin/AdminSettings';
+
 // Page transition wrapper
 const PageWrapper = ({ children }) => (
     <motion.div
@@ -35,12 +45,13 @@ const PageWrapper = ({ children }) => (
 // Routing with transitions
 const AppRoutes = () => {
     const location = useLocation();
-    // Login/register pages don't show Navbar+Footer
+    // Login/register/admin pages don't show Navbar+Footer
     const isAuth = location.pathname === '/login' || location.pathname === '/register';
+    const isAdmin = location.pathname.startsWith('/admin');
 
     return (
         <>
-            {!isAuth && <Navbar />}
+            {!isAuth && !isAdmin && <Navbar />}
             <AnimatePresence mode="wait">
                 <Routes location={location} key={location.pathname}>
                     <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
@@ -54,11 +65,23 @@ const AppRoutes = () => {
                     <Route path="/register" element={<PageWrapper><Register /></PageWrapper>} />
                     <Route path="/account" element={<PageWrapper><Account /></PageWrapper>} />
                     <Route path="/ceylon-cinnamon" element={<PageWrapper><CeylonCinnamon /></PageWrapper>} />
+
+                    {/* Admin routes */}
+                    <Route path="/admin/login" element={<AdminLogin />} />
+                    <Route path="/admin" element={<AdminLayout />}>
+                        <Route index element={<Dashboard />} />
+                        <Route path="products" element={<AdminProducts />} />
+                        <Route path="orders" element={<AdminOrders />} />
+                        <Route path="customers" element={<AdminCustomers />} />
+                        <Route path="reviews" element={<AdminReviews />} />
+                        <Route path="settings" element={<AdminSettings />} />
+                    </Route>
+
                     <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
                 </Routes>
             </AnimatePresence>
-            {!isAuth && <Footer />}
-            {!isAuth && <BackToTop />}
+            {!isAuth && !isAdmin && <Footer />}
+            {!isAuth && !isAdmin && <BackToTop />}
         </>
     );
 };
@@ -78,3 +101,4 @@ const App = () => {
 };
 
 export default App;
+
