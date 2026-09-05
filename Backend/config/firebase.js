@@ -50,7 +50,17 @@ try {
   console.warn('⚠️ Firebase Admin initialization warning:', error.message);
 }
 
-export const db = admin.firestore();
+import { getFirestore } from 'firebase-admin/firestore';
+
+const databaseId = process.env.FIRESTORE_DATABASE_ID || 'default';
+let firestoreDb;
+try {
+  firestoreDb = getFirestore(admin.app(), databaseId);
+} catch {
+  firestoreDb = admin.firestore();
+}
+
+export const db = firestoreDb;
 export const FieldValue = admin.firestore.FieldValue;
 export const Timestamp = admin.firestore.Timestamp;
 export { admin };
