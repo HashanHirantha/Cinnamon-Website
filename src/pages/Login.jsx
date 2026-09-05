@@ -281,7 +281,7 @@ const Login = () => {
             style={{ background: 'radial-gradient(ellipse at 30% 50%, #3d1a0a 0%, #1a0a04 40%, #0f0703 100%)' }}>
             <BgDecor />
             {/* Card container */}
-            <div className="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden flex" style={{ minHeight: mode === 'signup' ? '720px' : '580px', transition: 'min-height 0.5s ease' }}>
+            <div className="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden flex" style={{ minHeight: '580px' }}>
 
                 {/* ── Form panel (white side) ── */}
                 <div
