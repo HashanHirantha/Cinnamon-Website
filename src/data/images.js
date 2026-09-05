@@ -1,44 +1,49 @@
+import imgBag from '../assets/auth/cinnamon-bag-lavender.jpg';
+import imgBowl from '../assets/auth/cinnamon-bowl-leaves.jpg';
+import imgSticks from '../assets/auth/cinnamon-sticks-powder.jpg';
+import imgAnother from '../assets/auth/anotherone.jpg';
+
 // Central image references — swap URLs here to replace images later
 // Uses Unsplash for realistic cinnamon imagery
 
 export const IMAGES = {
     // Hero
-    hero_main: 'https://images.unsplash.com/photo-1607920591413-4ec007e70023?w=1920&q=80',
-    hero_bg: 'https://images.unsplash.com/photo-1581400831765-2c4eedababce?w=1920&q=80',
+    hero_main: imgSticks,
+    hero_bg: imgBowl,
 
     // Hero slideshow — each slide has a unique Framer Motion transition type
     // transition: 'fade' | 'zoom' | 'slideLeft' | 'slideRight' | 'blur'
     heroSlides: [
         {
-            url: 'https://images.unsplash.com/photo-1607920591413-4ec007e70023?w=1920&q=80',
-            transition: 'fade',
+            url: imgSticks,
+            transition: 'morph',
             label: 'Pure Ceylon Cinnamon',
         },
         {
-            url: 'https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=1920&q=80',
-            transition: 'zoom',
+            url: imgBag,
+            transition: 'morph',
             label: 'Premium Cinnamon Quills',
         },
         {
-            url: 'https://images.unsplash.com/photo-1601093475680-0d31c07fdd9e?w=1920&q=80',
-            transition: 'slideLeft',
+            url: imgBowl,
+            transition: 'morph',
             label: 'Traditionally Harvested',
         },
         {
-            url: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=1920&q=80',
-            transition: 'slideRight',
+            url: imgAnother,
+            transition: 'morph',
             label: 'From the Heart of Sri Lanka',
         },
         {
-            url: 'https://images.unsplash.com/photo-1581400831765-2c4eedababce?w=1920&q=80',
-            transition: 'blur',
+            url: imgBowl,
+            transition: 'morph',
             label: 'Nature\'s Finest Spice',
         },
     ],
 
     // Story / About
     story_farm: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=900&q=80',
-    story_harvest: 'https://images.unsplash.com/photo-1601093475680-0d31c07fdd9e?w=900&q=80',
+    story_harvest: imgBowl,
     story_processing: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=900&q=80',
     about_hero: 'https://images.unsplash.com/photo-1607920591413-4ec007e70023?w=1200&q=80',
     about_farm: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=800&q=80',
@@ -47,7 +52,7 @@ export const IMAGES = {
     // Products
     product_quills: 'https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=600&q=80',
     product_powder: 'https://images.unsplash.com/photo-1584975380568-e6e3b3e09f87?w=600&q=80',
-    product_sticks: 'https://images.unsplash.com/photo-1601093475680-0d31c07fdd9e?w=600&q=80',
+    product_sticks: imgSticks,
     product_tea: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80',
     product_essential_oil: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&q=80',
     product_gift_box: 'https://images.unsplash.com/photo-1607920591413-4ec007e70023?w=600&q=80',
@@ -63,7 +68,7 @@ export const IMAGES = {
 
     // Showcase / CTA
     showcase: 'https://images.unsplash.com/photo-1607920591413-4ec007e70023?w=1400&q=80',
-    cta_bg: 'https://images.unsplash.com/photo-1581400831765-2c4eedababce?w=1600&q=80',
+    cta_bg: 'https://images.unsplash.com/photo-1601093475680-0d31c07fdd9e?w=1600&q=80',
     journey_bg: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=1600&q=80',
 
     // Avatars (customer reviews)

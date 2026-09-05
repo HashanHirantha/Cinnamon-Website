@@ -6,6 +6,7 @@ import StatusBadge from '../../admin/components/StatusBadge';
 import Modal from '../../admin/components/Modal';
 import ConfirmDialog from '../../admin/components/ConfirmDialog';
 import { useAdminToast } from '../../admin/components/AdminToast';
+import ImageUpload from '../../admin/components/ImageUpload';
 import { useProducts } from '../../hooks/useProducts';
 
 const STORAGE_KEY = 'ceylon_admin_categories';
@@ -100,8 +101,10 @@ const Categories = () => {
                     <input value={form.name} onChange={set('name')} placeholder="e.g. Quills" style={inputStyle} />
                     <label style={{ fontSize: '12px', fontWeight: '600', color: '#374151', display: 'block', marginBottom: '6px' }}>Slug (auto-generated if blank)</label>
                     <input value={form.slug} onChange={set('slug')} placeholder="e.g. quills" style={inputStyle} />
-                    <label style={{ fontSize: '12px', fontWeight: '600', color: '#374151', display: 'block', marginBottom: '6px' }}>Image URL</label>
-                    <input value={form.image} onChange={set('image')} placeholder="https://..." style={inputStyle} />
+                    <label style={{ fontSize: '12px', fontWeight: '600', color: '#374151', display: 'block', marginBottom: '6px' }}>Category Image</label>
+                    <div style={{ marginBottom: '14px' }}>
+                        <ImageUpload value={form.image} onChange={(val) => setForm(f => ({ ...f, image: val }))} />
+                    </div>
                     <label style={{ fontSize: '12px', fontWeight: '600', color: '#374151', display: 'block', marginBottom: '6px' }}>Status</label>
                     <select value={form.status} onChange={set('status')} style={{ ...inputStyle }}>
                         <option value="active">Active</option>

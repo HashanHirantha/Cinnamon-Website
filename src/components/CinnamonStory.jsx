@@ -11,7 +11,7 @@ const stats = [
 
 const CinnamonStory = () => {
     const ref = useRef(null);
-    const inView = useInView(ref, { once: true, margin: '-100px' });
+    const inView = useInView(ref, { once: false, margin: '-100px' });
 
     return (
         <section ref={ref} className="py-20 lg:py-32 bg-cream-50 overflow-hidden">

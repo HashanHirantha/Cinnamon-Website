@@ -7,7 +7,7 @@ import ProductCard from './ProductCard';
 
 const FeaturedProducts = () => {
     const ref = useRef(null);
-    const inView = useInView(ref, { once: true, margin: '-80px' });
+    const inView = useInView(ref, { once: false, margin: '-80px' });
 
     const featured = products.filter(p => p.featured);
 

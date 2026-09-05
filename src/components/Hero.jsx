@@ -26,7 +26,11 @@ const slideVariants = {
         center: { opacity: 1, x: 0, transition: { duration: 1.0, ease: [0.25, 0.46, 0.45, 0.94] } },
         exit: { opacity: 0, x: '30%', transition: { duration: 0.8, ease: 'easeIn' } },
     },
-    
+    morph: {
+        enter: { opacity: 0, scale: 1.15, filter: 'blur(15px)' },
+        center: { opacity: 1, scale: 1, filter: 'blur(0px)', transition: { duration: 1.8, ease: [0.22, 1, 0.36, 1] } },
+        exit: { opacity: 0, scale: 0.85, filter: 'blur(15px)', transition: { duration: 1.2, ease: "easeInOut" } },
+    }
 };
 
 // ─── Decorative floating element ────────────────────────────────────────────
@@ -56,9 +60,6 @@ const Slide = ({ slide }) => {
                 alt={slide.label}
                 className="w-full h-full object-cover"
             />
-            {/* Multi-layer gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-cinnamon-900/90 via-cinnamon-900/70 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-t from-cinnamon-900/80 via-transparent to-transparent" />
         </motion.div>
     );
 };
@@ -66,6 +67,42 @@ const Slide = ({ slide }) => {
 // ─── Hero ────────────────────────────────────────────────────────────────────
 const AUTO_PLAY_INTERVAL = 5000;
 const slides = IMAGES.heroSlides;
+
+const typewriterContainer = {
+    hidden: { opacity: 1 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.05,
+        },
+    },
+};
+
+const typewriterLetter = {
+    hidden: { opacity: 0, y: 15 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { type: "spring", damping: 15, stiffness: 200 },
+    },
+};
+
+const AnimatedText = ({ text, className, style }) => {
+    return (
+        <span className={className} style={style}>
+            {text.split('').map((char, index) => (
+                <motion.span
+                    key={index}
+                    variants={typewriterLetter}
+                    className="inline-block whitespace-pre"
+                >
+                    {char}
+                </motion.span>
+            ))}
+        </span>
+    );
+};
+
 
 const Hero = () => {
     const [current, setCurrent] = useState(0);
@@ -95,7 +132,7 @@ const Hero = () => {
 
     return (
         <section
-            className="relative min-h-screen flex items-center overflow-hidden"
+            className="relative min-h-screen flex items-center justify-center overflow-hidden"
             onMouseEnter={() => setShowControls(true)}
             onMouseLeave={() => setShowControls(false)}
         >
@@ -142,61 +179,59 @@ const Hero = () => {
             </AnimatePresence>
 
             {/* ── Main content ── */}
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">
-                <div className="max-w-2xl">
-                    <motion.div
-                        variants={containerVariants}
-                        initial="hidden"
-                        animate="visible"
-                    >
-                        {/* Trust badge */}
-                        <motion.div variants={itemVariants}>
-                            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-cream-100 text-xs font-medium px-4 py-2 rounded-full mb-6">
-                                <Shield className="w-4 h-4 text-gold-400" />
-                                100% Authentic Ceylon Cinnamon
-                            </div>
-                        </motion.div>
-
-                        {/* Headline */}
-                        <motion.h1
-                            variants={itemVariants}
-                            className="font-serif text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-[1.05] mb-6"
-                        >
-                            Pure
-                            <br />
-                            <span className="text-gold-400">Ceylon</span>
-                            <br />
-                            Cinnamon
-                        </motion.h1>
-
-                        {/* Subheading */}
-                        <motion.p
-                            variants={itemVariants}
-                            className="text-cream-200 text-lg sm:text-xl leading-relaxed mb-10 max-w-lg"
-                        >
-                            Nature's finest spice, grown in the{' '}
-                            <span className="text-gold-400 font-medium">heart of Sri Lanka</span>.
-                            Carefully harvested, traditionally processed, delivered to your door.
-                        </motion.p>
-
-                        {/* CTAs */}
-                        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4">
-                            <Link
-                                to="/shop"
-                                className="group inline-flex items-center justify-center gap-3 bg-cinnamon-600 hover:bg-cinnamon-500 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300 shadow-premium hover:shadow-lg hover:scale-105"
-                            >
-                                Explore Collection
-                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                            </Link>
-                            <Link
-                                to="/about"
-                                className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300"
-                            >
-                                Discover Our Story
-                            </Link>
-                        </motion.div>
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="flex flex-col items-center max-w-4xl"
+                >
+                    {/* Trust badge */}
+                    <motion.div variants={itemVariants}>
+                        <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-cream-100 text-xs font-medium px-4 py-2 rounded-full mb-6">
+                            <Shield className="w-4 h-4 text-gold-400" />
+                            100% Authentic Ceylon Cinnamon
+                        </div>
                     </motion.div>
-                </div>
+
+                    {/* Headline */}
+                    <motion.h1
+                        variants={typewriterContainer}
+                        className="font-serif text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-[1.05] mb-6 sm:whitespace-nowrap"
+                    >
+                        <AnimatedText text="Pure " />
+                        <AnimatedText text="Ceylon" className="text-gold-400" />
+                        <AnimatedText text=" Cinnamon" />
+                    </motion.h1>
+
+                </motion.div>
+            </div>
+
+            {/* ── Bottom Content (CTAs & Single Line Subtext) ── */}
+            <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 w-full max-w-7xl px-4 flex flex-col items-center justify-center">
+                <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center w-full mb-6">
+                    <Link
+                        to="/shop"
+                        className="group inline-flex items-center justify-center gap-3 bg-cinnamon-600 hover:bg-cinnamon-500 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300 shadow-premium hover:shadow-lg hover:scale-105"
+                    >
+                        Explore Collection
+                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                    <Link
+                        to="/about"
+                        className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300"
+                    >
+                        Discover Our Story
+                    </Link>
+                </motion.div>
+
+                {/* Subheading in Single Line */}
+                <motion.p
+                    variants={itemVariants}
+                    className="text-cream-200 text-sm sm:text-base lg:text-lg whitespace-nowrap text-center opacity-90 tracking-wide"
+                >
+                    Nature's finest spice, grown in the <span className="text-gold-400 font-medium">heart of Sri Lanka</span>. Carefully harvested, traditionally processed, delivered to your door.
+                </motion.p>
             </div>
 
             {/* ── Dot indicators ── */}
@@ -251,7 +286,7 @@ const Hero = () => {
                     <div className="w-1 h-2 bg-white/60 rounded-full" />
                 </motion.div>
             </motion.div>
-        </section>
+        </section >
     );
 };
 
