@@ -79,7 +79,7 @@ const Navbar = () => {
             <header
                 className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${navbarBg}`}
             >
-                <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <nav className="w-full px-4 sm:px-8 xl:px-16 mx-auto">
                     <div className="flex items-center justify-between h-16 lg:h-20">
                         {/* Logo */}
                         <Link
@@ -88,7 +88,7 @@ const Navbar = () => {
                         >
                             <img src={CustomLogo} alt="Pure Gold Logo" className="h-12 w-auto object-contain drop-shadow-md" />
                             <div>
-                                CEYLONÉ
+                                PURE GOLD PRODUCTS
                                 <span className={`block text-[10px] font-sans font-normal tracking-[0.2em] uppercase mt-[-4px] transition-colors ${scrolled ? 'text-cinnamon-500' : 'text-white/70'}`}>
                                     Pure Ceylon Cinnamon
                                 </span>

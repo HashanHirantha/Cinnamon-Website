@@ -16,27 +16,27 @@ export const IMAGES = {
     heroSlides: [
         {
             url: imgSticks,
-            transition: 'fade',
+            transition: 'morph',
             label: 'Pure Ceylon Cinnamon',
         },
         {
             url: imgBag,
-            transition: 'zoom',
+            transition: 'morph',
             label: 'Premium Cinnamon Quills',
         },
         {
             url: imgBowl,
-            transition: 'slideLeft',
+            transition: 'morph',
             label: 'Traditionally Harvested',
         },
         {
             url: imgAnother,
-            transition: 'slideRight',
+            transition: 'morph',
             label: 'From the Heart of Sri Lanka',
         },
         {
             url: imgBowl,
-            transition: 'blur',
+            transition: 'morph',
             label: 'Nature\'s Finest Spice',
         },
     ],
