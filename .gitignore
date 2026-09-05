@@ -62,3 +62,8 @@ Desktop.ini
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# ===== Firebase =====
+.firebase/
+firebase-debug.log
+firebase-debug.*.log

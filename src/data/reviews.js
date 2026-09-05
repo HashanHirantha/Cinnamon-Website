@@ -9,7 +9,7 @@ export const reviews = [
         rating: 5,
         date: '2024-05-12',
         title: 'Absolutely extraordinary quality',
-        text: 'I have tried cinnamon from many sources, but CEYLONÉ is on another level entirely. The aroma is intoxicating, the quills are perfectly rolled, and the flavour is unlike any cassia variety. Truly worth every penny.',
+        text: 'I have tried cinnamon from many sources, but PURE GOLD Products is on another level entirely. The aroma is intoxicating, the quills are perfectly rolled, and the flavour is unlike any cassia variety. Truly worth every penny.',
     },
     {
         id: 2,
@@ -29,7 +29,7 @@ export const reviews = [
         rating: 5,
         date: '2024-04-15',
         title: 'Best Ceylon cinnamon I have tasted',
-        text: 'As someone who cooks with spices daily, the difference between real Ceylon cinnamon and cassia is immediately noticeable. CEYLONÉ delivers the genuine article with incredible service and fast shipping.',
+        text: 'As someone who cooks with spices daily, the difference between real Ceylon cinnamon and cassia is immediately noticeable. PURE GOLD Products delivers the genuine article with incredible service and fast shipping.',
     },
     {
         id: 4,
@@ -39,7 +39,7 @@ export const reviews = [
         rating: 4,
         date: '2024-03-30',
         title: 'Beautiful aroma, great flavour',
-        text: 'Beautiful quality and amazing aroma. I use the cinnamon powder in my pastry kitchen and clients always ask what makes the flavour so special. The answer is always CEYLONÉ.',
+        text: 'Beautiful quality and amazing aroma. I use the cinnamon powder in my pastry kitchen and clients always ask what makes the flavour so special. The answer is always PURE GOLD Products.',
     },
     {
         id: 5,
