@@ -238,7 +238,7 @@ const Navbar = () => {
                         >
                             {/* Header */}
                             <div className="flex items-center justify-between px-6 py-5 border-b border-cream-200">
-                                <span className="font-serif text-xl font-bold text-cinnamon-900 tracking-widest">CEYLONÉ</span>
+                                <span className="font-serif text-lg font-bold text-cinnamon-900 tracking-wider">PURE GOLD Products</span>
                                 <button
                                     onClick={() => setMobileOpen(false)}
                                     aria-label="Close menu"

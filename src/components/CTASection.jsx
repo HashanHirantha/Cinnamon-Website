@@ -41,7 +41,7 @@ const CTASection = () => {
                     </h2>
 
                     <p className="text-cream-200/80 text-lg sm:text-xl leading-relaxed mb-10 max-w-2xl mx-auto">
-                        Join thousands of discerning customers around the world who have made CEYLONÉ their trusted source for authentic, premium-grade Ceylon cinnamon.
+                        Join thousands of discerning customers around the world who have made PURE GOLD Products their trusted source for authentic, premium-grade Ceylon cinnamon.
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">

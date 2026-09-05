@@ -94,7 +94,7 @@ const CeylonCinnamon = () => {
                     <div className="bg-forest-50 border border-forest-200 rounded-3xl p-8 mb-12">
                         <h2 className="font-serif text-2xl font-bold text-forest-900 mb-4">🌿 A Note on Health Claims</h2>
                         <p className="text-sm text-forest-800 leading-relaxed">
-                            While Ceylon cinnamon has long been associated with traditional Ayurvedic and Unani medicine, CEYLONÉ does not make medical or therapeutic claims about our products. Our cinnamon is a premium spice and food ingredient. Please consult a qualified healthcare professional for any health-related queries. We are committed to transparency and factual communication.
+                            While Ceylon cinnamon has long been associated with traditional Ayurvedic and Unani medicine, PURE GOLD Products does not make medical or therapeutic claims about our products. Our cinnamon is a premium spice and food ingredient. Please consult a qualified healthcare professional for any health-related queries. We are committed to transparency and factual communication.
                         </p>
                     </div>
                 </div>
