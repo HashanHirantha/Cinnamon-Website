@@ -464,6 +464,336 @@ const seedDatabase = async () => {
     }, { merge: true });
     console.log('✅ Store settings seeded.');
 
+    // 8. Seed Customer Users
+    console.log('👤 Seeding customer user accounts...');
+    const customerPasswordHash = await bcrypt.hash('customer@123', salt);
+    const users = [
+      {
+        id: 'usr-customer-01',
+        name: 'Amara Jayawardena',
+        email: 'amara@example.com',
+        passwordHash: customerPasswordHash,
+        phone: '+94 71 234 5678',
+        country: 'Sri Lanka',
+        addresses: [
+          {
+            id: 'addr-01',
+            firstName: 'Amara',
+            lastName: 'Jayawardena',
+            address: '12 Temple Road',
+            apartment: 'Villa 4',
+            city: 'Colombo',
+            state: 'Western Province',
+            postalCode: '00300',
+            country: 'Sri Lanka',
+            phone: '+94 71 234 5678',
+            isDefault: true,
+          },
+        ],
+        cart: [],
+        wishlist: ['ceylon-cinnamon-quills-premium', 'cinnamon-gift-box-collection'],
+        role: 'customer',
+        status: 'active',
+      },
+      {
+        id: 'usr-customer-02',
+        name: 'Marcus Vance',
+        email: 'marcus.vance@culinary.co.uk',
+        passwordHash: customerPasswordHash,
+        phone: '+44 7911 123456',
+        country: 'United Kingdom',
+        addresses: [
+          {
+            id: 'addr-02',
+            firstName: 'Marcus',
+            lastName: 'Vance',
+            address: '14 Kensington High St',
+            apartment: 'Flat 2A',
+            city: 'London',
+            state: 'Greater London',
+            postalCode: 'W8 4PE',
+            country: 'United Kingdom',
+            phone: '+44 7911 123456',
+            isDefault: true,
+          },
+        ],
+        cart: [],
+        wishlist: ['premium-export-pack'],
+        role: 'customer',
+        status: 'active',
+      },
+      {
+        id: 'usr-customer-03',
+        name: 'Elena Rostova',
+        email: 'elena.rostova@wellness.de',
+        passwordHash: customerPasswordHash,
+        phone: '+49 170 9876543',
+        country: 'Germany',
+        addresses: [
+          {
+            id: 'addr-03',
+            firstName: 'Elena',
+            lastName: 'Rostova',
+            address: '28 Friedrichstrasse',
+            apartment: '',
+            city: 'Berlin',
+            state: 'Berlin',
+            postalCode: '10117',
+            country: 'Germany',
+            phone: '+49 170 9876543',
+            isDefault: true,
+          },
+        ],
+        cart: [],
+        wishlist: ['cinnamon-herbal-tea', 'cinnamon-essential-oil'],
+        role: 'customer',
+        status: 'active',
+      },
+    ];
+
+    for (const u of users) {
+      await db.collection('users').doc(u.id).set({
+        ...u,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }, { merge: true });
+    }
+    console.log(`✅ ${users.length} customer user accounts seeded.`);
+
+    // 9. Seed Orders
+    console.log('🛒 Seeding sample orders...');
+    const orders = [
+      {
+        id: 'ORD-2025-1001',
+        orderId: 'ORD-2025-1001',
+        userId: 'usr-customer-01',
+        customer: {
+          name: 'Amara Jayawardena',
+          email: 'amara@example.com',
+          phone: '+94 71 234 5678',
+        },
+        items: [
+          {
+            productId: 'ceylon-cinnamon-quills-premium',
+            name: 'Ceylon Cinnamon Quills — Premium Grade',
+            price: 18.99,
+            quantity: 2,
+            image: 'https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=600&q=80',
+            weight: '100g',
+            total: 37.98,
+          },
+        ],
+        subtotal: 37.98,
+        discount: 3.80,
+        appliedCoupon: 'WELCOME10',
+        shippingFee: 2.50,
+        total: 36.68,
+        shippingAddress: {
+          firstName: 'Amara',
+          lastName: 'Jayawardena',
+          address: '12 Temple Road',
+          apartment: 'Villa 4',
+          city: 'Colombo',
+          state: 'Western Province',
+          postalCode: '00300',
+          country: 'Sri Lanka',
+          phone: '+94 71 234 5678',
+          email: 'amara@example.com',
+        },
+        paymentMethod: 'cod',
+        paymentStatus: 'paid',
+        orderStatus: 'delivered',
+        trackingNumber: 'TRK-981245',
+        notes: 'Please leave at security gate',
+        createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      {
+        id: 'ORD-2025-1002',
+        orderId: 'ORD-2025-1002',
+        userId: 'usr-customer-02',
+        customer: {
+          name: 'Marcus Vance',
+          email: 'marcus.vance@culinary.co.uk',
+          phone: '+44 7911 123456',
+        },
+        items: [
+          {
+            productId: 'cinnamon-gift-box-collection',
+            name: 'Ceylon Cinnamon Gift Box',
+            price: 64.99,
+            quantity: 1,
+            image: 'https://images.unsplash.com/photo-1607920591413-4ec007e70023?w=600&q=80',
+            weight: 'Set',
+            total: 64.99,
+          },
+          {
+            productId: 'cinnamon-essential-oil',
+            name: 'Ceylon Cinnamon Essential Oil',
+            price: 34.99,
+            quantity: 1,
+            image: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&q=80',
+            weight: '30ml',
+            total: 34.99,
+          },
+        ],
+        subtotal: 99.98,
+        discount: 0,
+        appliedCoupon: null,
+        shippingFee: 0,
+        total: 99.98,
+        shippingAddress: {
+          firstName: 'Marcus',
+          lastName: 'Vance',
+          address: '14 Kensington High St',
+          apartment: 'Flat 2A',
+          city: 'London',
+          state: 'Greater London',
+          postalCode: 'W8 4PE',
+          country: 'United Kingdom',
+          phone: '+44 7911 123456',
+          email: 'marcus.vance@culinary.co.uk',
+        },
+        paymentMethod: 'bank_transfer',
+        paymentStatus: 'paid',
+        orderStatus: 'shipped',
+        trackingNumber: 'TRK-442190',
+        notes: 'Gift wrapping requested',
+        createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      {
+        id: 'ORD-2025-1003',
+        orderId: 'ORD-2025-1003',
+        userId: 'usr-customer-03',
+        customer: {
+          name: 'Elena Rostova',
+          email: 'elena.rostova@wellness.de',
+          phone: '+49 170 9876543',
+        },
+        items: [
+          {
+            productId: 'cinnamon-herbal-tea',
+            name: 'Cinnamon Herbal Tea — Loose Leaf',
+            price: 14.99,
+            quantity: 2,
+            image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80',
+            weight: '75g',
+            total: 29.98,
+          },
+        ],
+        subtotal: 29.98,
+        discount: 0,
+        appliedCoupon: null,
+        shippingFee: 10.00,
+        total: 39.98,
+        shippingAddress: {
+          firstName: 'Elena',
+          lastName: 'Rostova',
+          address: '28 Friedrichstrasse',
+          apartment: '',
+          city: 'Berlin',
+          state: 'Berlin',
+          postalCode: '10117',
+          country: 'Germany',
+          phone: '+49 170 9876543',
+          email: 'elena.rostova@wellness.de',
+        },
+        paymentMethod: 'cod',
+        paymentStatus: 'pending',
+        orderStatus: 'processing',
+        trackingNumber: 'TRK-771923',
+        notes: '',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    ];
+
+    for (const o of orders) {
+      await db.collection('orders').doc(o.id).set({
+        ...o,
+      }, { merge: true });
+    }
+    console.log(`✅ ${orders.length} sample orders seeded.`);
+
+    // 10. Seed Customer Contacts
+    console.log('✉️ Seeding customer contact inquiries...');
+    const contacts = [
+      {
+        id: 'msg-01',
+        name: 'Chef Jean-Pierre',
+        email: 'jp@parischefs.fr',
+        phone: '+33 612 345 678',
+        subject: 'Wholesale Cinnamon Quills for Michelin Restaurant',
+        message: 'Bonjour, we are looking to establish a recurring monthly order of 10kg Grade Alba Ceylon cinnamon quills for our pastry team in Paris. Please share wholesale export pricing.',
+        status: 'new',
+      },
+      {
+        id: 'msg-02',
+        name: 'Dr. Anura Bandara',
+        email: 'anura.bandara@ayurvediccare.lk',
+        phone: '+94 77 987 6543',
+        subject: 'Certified Organic Cinnamon Powder Inquiry',
+        message: 'Do you provide laboratory certificates of analysis confirming heavy metal testing and coumarin levels for your organic powder batches? Looking for our clinical dispensary.',
+        status: 'replied',
+      },
+    ];
+
+    for (const cont of contacts) {
+      await db.collection('contacts').doc(cont.id).set({
+        ...cont,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }, { merge: true });
+    }
+    console.log(`✅ ${contacts.length} contact inquiries seeded.`);
+
+    // 11. Seed Admin Notifications
+    console.log('🔔 Seeding admin dashboard notifications...');
+    const notifications = [
+      {
+        id: 'notif-01',
+        title: 'New Order Placed',
+        message: 'Order #ORD-2025-1001 placed by Amara Jayawardena ($36.68)',
+        type: 'order',
+        referenceId: 'ORD-2025-1001',
+        isRead: false,
+      },
+      {
+        id: 'notif-02',
+        title: 'International Shipment',
+        message: 'Order #ORD-2025-1002 marked as shipped to United Kingdom.',
+        type: 'order',
+        referenceId: 'ORD-2025-1002',
+        isRead: true,
+      },
+      {
+        id: 'notif-03',
+        title: 'Stock Inventory Alert',
+        message: 'Ceylon Cinnamon Gift Box inventory is down to 25 units.',
+        type: 'stock',
+        referenceId: 'cinnamon-gift-box-collection',
+        isRead: false,
+      },
+      {
+        id: 'notif-04',
+        title: 'New Wholesale Inquiry',
+        message: 'Wholesale request received from Chef Jean-Pierre (Paris).',
+        type: 'contact',
+        referenceId: 'msg-01',
+        isRead: false,
+      },
+    ];
+
+    for (const n of notifications) {
+      await db.collection('notifications').doc(n.id).set({
+        ...n,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }, { merge: true });
+    }
+    console.log(`✅ ${notifications.length} admin notifications seeded.`);
+
     console.log('\n🎉 Seed process completed successfully!');
     process.exit(0);
   } catch (error) {
