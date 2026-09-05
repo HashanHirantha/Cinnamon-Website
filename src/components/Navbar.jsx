@@ -99,7 +99,7 @@ const Navbar = () => {
                                         to={to}
                                         end={to === '/'}
                                         className={({ isActive }) =>
-                                            `text-sm font-medium transition-colors duration-200 relative pb-1 group ${linkColor} ${isActive ? 'text-cinnamon-600' : ''}`
+                                            `text-sm font-medium transition-colors duration-200 relative pb-1 group outline-none focus:outline-none ${linkColor} ${isActive ? 'text-cinnamon-600' : ''}`
                                         }
                                     >
                                         {({ isActive }) => (
