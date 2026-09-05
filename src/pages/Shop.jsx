@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Search, SlidersHorizontal, X, ChevronDown } from 'lucide-react';
-import { products } from '../data/products';
+import { useProducts } from '../hooks/useProducts';
 import { categories } from '../data/categories';
 import ProductGrid from '../components/ProductGrid';
 
@@ -15,6 +15,7 @@ const sortOptions = [
 ];
 
 const Shop = () => {
+    const { products } = useProducts();
     const [searchParams, setSearchParams] = useSearchParams();
     const [search, setSearch] = useState(searchParams.get('search') || '');
     const [activeCategory, setActiveCategory] = useState(searchParams.get('category') || 'all');

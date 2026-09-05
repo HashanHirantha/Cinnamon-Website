@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Heart, ShoppingCart, Truck, Shield, RotateCcw, Star, ChevronRight, Minus, Plus, ZoomIn
 } from 'lucide-react';
-import { products } from '../data/products';
+import { useProducts } from '../hooks/useProducts';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { toast } from '../components/Toast';
@@ -15,6 +15,7 @@ import { reviews } from '../data/reviews';
 const ProductDetails = () => {
     const { slug } = useParams();
     const navigate = useNavigate();
+    const { products } = useProducts();
     const product = products.find((p) => p.slug === slug);
     const { addToCart } = useCart();
     const { isWishlisted, toggleWishlist } = useWishlist();

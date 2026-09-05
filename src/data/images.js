@@ -6,6 +6,36 @@ export const IMAGES = {
     hero_main: 'https://images.unsplash.com/photo-1607920591413-4ec007e70023?w=1920&q=80',
     hero_bg: 'https://images.unsplash.com/photo-1581400831765-2c4eedababce?w=1920&q=80',
 
+    // Hero slideshow — each slide has a unique Framer Motion transition type
+    // transition: 'fade' | 'zoom' | 'slideLeft' | 'slideRight' | 'blur'
+    heroSlides: [
+        {
+            url: 'https://images.unsplash.com/photo-1607920591413-4ec007e70023?w=1920&q=80',
+            transition: 'fade',
+            label: 'Pure Ceylon Cinnamon',
+        },
+        {
+            url: 'https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=1920&q=80',
+            transition: 'zoom',
+            label: 'Premium Cinnamon Quills',
+        },
+        {
+            url: 'https://images.unsplash.com/photo-1601093475680-0d31c07fdd9e?w=1920&q=80',
+            transition: 'slideLeft',
+            label: 'Traditionally Harvested',
+        },
+        {
+            url: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=1920&q=80',
+            transition: 'slideRight',
+            label: 'From the Heart of Sri Lanka',
+        },
+        {
+            url: 'https://images.unsplash.com/photo-1581400831765-2c4eedababce?w=1920&q=80',
+            transition: 'blur',
+            label: 'Nature\'s Finest Spice',
+        },
+    ],
+
     // Story / About
     story_farm: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=900&q=80',
     story_harvest: 'https://images.unsplash.com/photo-1601093475680-0d31c07fdd9e?w=900&q=80',

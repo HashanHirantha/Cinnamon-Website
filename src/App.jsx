@@ -1,12 +1,17 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ToastProvider } from './components/Toast';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { AdminAuthProvider } from './context/AdminAuthContext';
+import { AdminToastProvider } from './admin/components/AdminToast';
+import AdminRoute from './components/AdminRoute';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import BackToTop from './components/BackToTop';
 
+// Public pages
 import Home from './pages/Home';
 import Shop from './pages/Shop';
 import ProductDetails from './pages/ProductDetails';
@@ -20,15 +25,22 @@ import Account from './pages/Account';
 import CeylonCinnamon from './pages/CeylonCinnamon';
 import NotFound from './pages/NotFound';
 
-// Admin
-import AdminLayout from './pages/admin/AdminLayout';
+// Admin pages
 import AdminLogin from './pages/admin/AdminLogin';
-import Dashboard from './pages/admin/Dashboard';
-import AdminProducts from './pages/admin/AdminProducts';
-import AdminOrders from './pages/admin/AdminOrders';
-import AdminCustomers from './pages/admin/AdminCustomers';
-import AdminReviews from './pages/admin/AdminReviews';
-import AdminSettings from './pages/admin/AdminSettings';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import Products from './pages/admin/Products';
+import Categories from './pages/admin/Categories';
+import Inventory from './pages/admin/Inventory';
+import Orders from './pages/admin/Orders';
+import Customers from './pages/admin/Customers';
+import Payments from './pages/admin/Payments';
+import Delivery from './pages/admin/Delivery';
+import Coupons from './pages/admin/Coupons';
+import Reviews from './pages/admin/Reviews';
+import Reports from './pages/admin/Reports';
+import Notifications from './pages/admin/Notifications';
+import Staff from './pages/admin/Staff';
+import Settings from './pages/admin/Settings';
 
 // Page transition wrapper
 const PageWrapper = ({ children }) => (
@@ -42,23 +54,34 @@ const PageWrapper = ({ children }) => (
     </motion.div>
 );
 
-// Routing with transitions
+// Protected route — redirects unauthenticated users to /login
+const ProtectedRoute = ({ children }) => {
+    const { user } = useAuth();
+    const location = useLocation();
+    if (!user) {
+        return <Navigate to="/login" state={{ from: location.pathname }} replace />;
+    }
+    return children;
+};
+
+// Routing
 const AppRoutes = () => {
     const location = useLocation();
-    // Login/register/admin pages don't show Navbar+Footer
     const isAuth = location.pathname === '/login' || location.pathname === '/register';
     const isAdmin = location.pathname.startsWith('/admin');
+    const hideChrome = isAuth || isAdmin;
 
     return (
         <>
-            {!isAuth && !isAdmin && <Navbar />}
+            {!hideChrome && <Navbar />}
             <AnimatePresence mode="wait">
                 <Routes location={location} key={location.pathname}>
+                    {/* Public routes */}
                     <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
                     <Route path="/shop" element={<PageWrapper><Shop /></PageWrapper>} />
                     <Route path="/shop/:slug" element={<PageWrapper><ProductDetails /></PageWrapper>} />
                     <Route path="/cart" element={<PageWrapper><Cart /></PageWrapper>} />
-                    <Route path="/checkout" element={<PageWrapper><Checkout /></PageWrapper>} />
+                    <Route path="/checkout" element={<ProtectedRoute><PageWrapper><Checkout /></PageWrapper></ProtectedRoute>} />
                     <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
                     <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
                     <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
@@ -66,22 +89,29 @@ const AppRoutes = () => {
                     <Route path="/account" element={<PageWrapper><Account /></PageWrapper>} />
                     <Route path="/ceylon-cinnamon" element={<PageWrapper><CeylonCinnamon /></PageWrapper>} />
 
-                    {/* Admin routes */}
+                    {/* Admin routes — completely separated, no Navbar/Footer */}
                     <Route path="/admin/login" element={<AdminLogin />} />
-                    <Route path="/admin" element={<AdminLayout />}>
-                        <Route index element={<Dashboard />} />
-                        <Route path="products" element={<AdminProducts />} />
-                        <Route path="orders" element={<AdminOrders />} />
-                        <Route path="customers" element={<AdminCustomers />} />
-                        <Route path="reviews" element={<AdminReviews />} />
-                        <Route path="settings" element={<AdminSettings />} />
-                    </Route>
+                    <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+                    <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+                    <Route path="/admin/products" element={<AdminRoute><Products /></AdminRoute>} />
+                    <Route path="/admin/categories" element={<AdminRoute><Categories /></AdminRoute>} />
+                    <Route path="/admin/inventory" element={<AdminRoute><Inventory /></AdminRoute>} />
+                    <Route path="/admin/orders" element={<AdminRoute><Orders /></AdminRoute>} />
+                    <Route path="/admin/customers" element={<AdminRoute><Customers /></AdminRoute>} />
+                    <Route path="/admin/payments" element={<AdminRoute><Payments /></AdminRoute>} />
+                    <Route path="/admin/delivery" element={<AdminRoute><Delivery /></AdminRoute>} />
+                    <Route path="/admin/coupons" element={<AdminRoute><Coupons /></AdminRoute>} />
+                    <Route path="/admin/reviews" element={<AdminRoute><Reviews /></AdminRoute>} />
+                    <Route path="/admin/reports" element={<AdminRoute><Reports /></AdminRoute>} />
+                    <Route path="/admin/notifications" element={<AdminRoute><Notifications /></AdminRoute>} />
+                    <Route path="/admin/staff" element={<AdminRoute><Staff /></AdminRoute>} />
+                    <Route path="/admin/settings" element={<AdminRoute><Settings /></AdminRoute>} />
 
                     <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
                 </Routes>
             </AnimatePresence>
-            {!isAuth && !isAdmin && <Footer />}
-            {!isAuth && !isAdmin && <BackToTop />}
+            {!hideChrome && <Footer />}
+            {!hideChrome && <BackToTop />}
         </>
     );
 };
@@ -89,13 +119,19 @@ const AppRoutes = () => {
 const App = () => {
     return (
         <BrowserRouter>
-            <CartProvider>
-                <WishlistProvider>
-                    <ToastProvider>
-                        <AppRoutes />
-                    </ToastProvider>
-                </WishlistProvider>
-            </CartProvider>
+            <AdminAuthProvider>
+                <AdminToastProvider>
+                    <AuthProvider>
+                        <CartProvider>
+                            <WishlistProvider>
+                                <ToastProvider>
+                                    <AppRoutes />
+                                </ToastProvider>
+                            </WishlistProvider>
+                        </CartProvider>
+                    </AuthProvider>
+                </AdminToastProvider>
+            </AdminAuthProvider>
         </BrowserRouter>
     );
 };

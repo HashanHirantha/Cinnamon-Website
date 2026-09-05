@@ -1,20 +1,89 @@
-import { motion } from 'framer-motion';
+import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Leaf, Shield } from 'lucide-react';
+import { ArrowRight, Leaf, Shield, ChevronLeft, ChevronRight } from 'lucide-react';
 import { IMAGES } from '../data/images';
 
-// Decorative floating element
+// ─── Per-transition Framer Motion variants ─────────────────────────────────
+const slideVariants = {
+    fade: {
+        enter: { opacity: 0 },
+        center: { opacity: 1, transition: { duration: 1.2, ease: 'easeInOut' } },
+        exit: { opacity: 0, transition: { duration: 0.8, ease: 'easeInOut' } },
+    },
+    zoom: {
+        enter: { opacity: 0, scale: 1.12 },
+        center: { opacity: 1, scale: 1, transition: { duration: 1.4, ease: [0.25, 0.46, 0.45, 0.94] } },
+        exit: { opacity: 0, scale: 0.96, transition: { duration: 0.9, ease: 'easeIn' } },
+    },
+    slideLeft: {
+        enter: { opacity: 0, x: '100%' },
+        center: { opacity: 1, x: 0, transition: { duration: 1.0, ease: [0.25, 0.46, 0.45, 0.94] } },
+        exit: { opacity: 0, x: '-30%', transition: { duration: 0.8, ease: 'easeIn' } },
+    },
+    slideRight: {
+        enter: { opacity: 0, x: '-100%' },
+        center: { opacity: 1, x: 0, transition: { duration: 1.0, ease: [0.25, 0.46, 0.45, 0.94] } },
+        exit: { opacity: 0, x: '30%', transition: { duration: 0.8, ease: 'easeIn' } },
+    },
+    
+};
+
+// ─── Decorative floating element ────────────────────────────────────────────
 const FloatingSpice = ({ className, delay = 0, duration = 6 }) => (
     <motion.div
         className={`absolute pointer-events-none opacity-30 ${className}`}
         animate={{ y: [0, -18, 0], rotate: [0, 10, -5, 0] }}
         transition={{ duration, delay, repeat: Infinity, ease: 'easeInOut' }}
     >
-        <Leaf className="w-8 h-8 text-cream-200" />
     </motion.div>
 );
 
+// ─── Single background slide ─────────────────────────────────────────────────
+const Slide = ({ slide }) => {
+    const variants = slideVariants[slide.transition] ?? slideVariants.fade;
+    return (
+        <motion.div
+            key={slide.url}
+            className="absolute inset-0"
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+        >
+            <img
+                src={slide.url}
+                alt={slide.label}
+                className="w-full h-full object-cover"
+            />
+            {/* Multi-layer gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-cinnamon-900/90 via-cinnamon-900/70 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-cinnamon-900/80 via-transparent to-transparent" />
+        </motion.div>
+    );
+};
+
+// ─── Hero ────────────────────────────────────────────────────────────────────
+const AUTO_PLAY_INTERVAL = 5000;
+const slides = IMAGES.heroSlides;
+
 const Hero = () => {
+    const [current, setCurrent] = useState(0);
+    const [showControls, setShowControls] = useState(false);
+
+    const goTo = useCallback((index) => {
+        setCurrent((index + slides.length) % slides.length);
+    }, []);
+
+    const prev = useCallback(() => goTo(current - 1), [current, goTo]);
+    const next = useCallback(() => goTo(current + 1), [current, goTo]);
+
+    // Auto-play
+    useEffect(() => {
+        const timer = setInterval(() => goTo(current + 1), AUTO_PLAY_INTERVAL);
+        return () => clearInterval(timer);
+    }, [current, goTo]);
+
     const containerVariants = {
         hidden: {},
         visible: { transition: { staggerChildren: 0.18 } },
@@ -25,26 +94,54 @@ const Hero = () => {
     };
 
     return (
-        <section className="relative min-h-screen flex items-center overflow-hidden">
-            {/* Background Image */}
-            <div className="absolute inset-0">
-                <img
-                    src={IMAGES.hero_main}
-                    alt="Premium Ceylon Cinnamon"
-                    className="w-full h-full object-cover"
-                    priority="true"
-                />
-                {/* Multi-layer gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-r from-cinnamon-900/90 via-cinnamon-900/70 to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-t from-cinnamon-900/80 via-transparent to-transparent" />
-            </div>
+        <section
+            className="relative min-h-screen flex items-center overflow-hidden"
+            onMouseEnter={() => setShowControls(true)}
+            onMouseLeave={() => setShowControls(false)}
+        >
+            {/* ── Slideshow background ── */}
+            <AnimatePresence mode="sync">
+                <Slide key={current} slide={slides[current]} />
+            </AnimatePresence>
 
-            {/* Floating decorative elements */}
+            {/* ── Floating decorative elements ── */}
             <FloatingSpice className="top-1/4 right-1/4 hidden lg:block" delay={0} duration={7} />
             <FloatingSpice className="top-1/3 right-1/3 hidden lg:block" delay={1.5} duration={9} />
             <FloatingSpice className="bottom-1/3 right-1/5 hidden lg:block" delay={3} duration={6} />
 
-            {/* Content */}
+            {/* ── Prev / Next arrows ── */}
+            <AnimatePresence>
+                {showControls && (
+                    <>
+                        <motion.button
+                            key="prev"
+                            initial={{ opacity: 0, x: -16 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -16 }}
+                            transition={{ duration: 0.25 }}
+                            onClick={prev}
+                            aria-label="Previous slide"
+                            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/30 hover:bg-black/50 backdrop-blur-sm border border-white/20 text-white transition-colors"
+                        >
+                            <ChevronLeft className="w-6 h-6" />
+                        </motion.button>
+                        <motion.button
+                            key="next"
+                            initial={{ opacity: 0, x: 16 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 16 }}
+                            transition={{ duration: 0.25 }}
+                            onClick={next}
+                            aria-label="Next slide"
+                            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/30 hover:bg-black/50 backdrop-blur-sm border border-white/20 text-white transition-colors"
+                        >
+                            <ChevronRight className="w-6 h-6" />
+                        </motion.button>
+                    </>
+                )}
+            </AnimatePresence>
+
+            {/* ── Main content ── */}
             <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">
                 <div className="max-w-2xl">
                     <motion.div
@@ -102,7 +199,43 @@ const Hero = () => {
                 </div>
             </div>
 
-            {/* Bottom scroll hint */}
+            {/* ── Dot indicators ── */}
+            <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+                {slides.map((_, i) => (
+                    <button
+                        key={i}
+                        onClick={() => goTo(i)}
+                        aria-label={`Go to slide ${i + 1}`}
+                        className="group relative flex items-center justify-center"
+                    >
+                        <motion.span
+                            animate={{
+                                width: i === current ? 28 : 8,
+                                backgroundColor: i === current ? '#d97706' : 'rgba(255,255,255,0.5)',
+                            }}
+                            transition={{ duration: 0.35, ease: 'easeInOut' }}
+                            className="block h-2 rounded-full"
+                            style={{ minWidth: 8 }}
+                        />
+                    </button>
+                ))}
+            </div>
+
+            {/* ── Slide label ── */}
+            {/* <AnimatePresence mode="wait">
+                <motion.p
+                    key={current}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.4 }}
+                    className="absolute bottom-16 left-1/2 -translate-x-1/2 z-20 text-white/50 text-xs tracking-widest uppercase whitespace-nowrap"
+                >
+                    {slides[current].label}
+                </motion.p>
+            </AnimatePresence> */}
+
+            {/* ── Scroll hint ── */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
