@@ -5,6 +5,7 @@ import { ShoppingCart, Search, User, Menu, X, Heart, LogOut } from 'lucide-react
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useAuth } from '../context/AuthContext';
+import CustomLogo from '../assets/logo.svg';
 
 const navLinks = [
     { to: '/', label: 'Home' },
@@ -83,12 +84,15 @@ const Navbar = () => {
                         {/* Logo */}
                         <Link
                             to="/"
-                            className={`font-serif text-2xl font-bold tracking-widest transition-colors duration-300 ${logoColor}`}
+                            className={`flex items-center gap-3 font-serif text-2xl font-bold tracking-widest transition-colors duration-300 ${logoColor}`}
                         >
-                            CEYLONÉ
-                            <span className={`block text-[10px] font-sans font-normal tracking-[0.2em] uppercase mt-[-4px] transition-colors ${scrolled ? 'text-cinnamon-500' : 'text-white/70'}`}>
-                                Pure Ceylon Cinnamon
-                            </span>
+                            <img src={CustomLogo} alt="Pure Gold Logo" className="h-12 w-auto object-contain drop-shadow-md" />
+                            <div>
+                                CEYLONÉ
+                                <span className={`block text-[10px] font-sans font-normal tracking-[0.2em] uppercase mt-[-4px] transition-colors ${scrolled ? 'text-cinnamon-500' : 'text-white/70'}`}>
+                                    Pure Ceylon Cinnamon
+                                </span>
+                            </div>
                         </Link>
 
                         {/* Desktop nav links */}
@@ -185,6 +189,7 @@ const Navbar = () => {
                                     </motion.span>
                                 )}
                             </Link>
+
                         </div>
 
                         {/* Mobile: cart + hamburger */}

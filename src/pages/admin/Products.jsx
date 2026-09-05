@@ -7,6 +7,7 @@ import ConfirmDialog from '../../admin/components/ConfirmDialog';
 import Modal from '../../admin/components/Modal';
 import Pagination from '../../admin/components/Pagination';
 import { useAdminToast } from '../../admin/components/AdminToast';
+import ImageUpload from '../../admin/components/ImageUpload';
 import { useProducts } from '../../hooks/useProducts';
 
 const CATEGORIES = ['quills', 'powder', 'tea', 'oils', 'gifts'];
@@ -54,7 +55,7 @@ const ProductForm = ({ initial = emptyForm, onSave, onClose }) => {
             </Field>
             <div style={{ gridColumn: '1/-1' }}><Field label="Short Description"><Input value={form.shortDescription} onChange={set('shortDescription')} placeholder="One-line summary" /></Field></div>
             <div style={{ gridColumn: '1/-1' }}><Field label="Description"><textarea value={form.description} onChange={set('description')} rows={3} placeholder="Detailed description" style={{ ...inputCls, resize: 'vertical', fontFamily: 'inherit' }} /></Field></div>
-            <div style={{ gridColumn: '1/-1' }}><Field label="Image URL"><Input value={form.image} onChange={set('image')} placeholder="https://images.unsplash.com/..." /></Field></div>
+            <div style={{ gridColumn: '1/-1' }}><Field label="Product Image"><ImageUpload value={form.image} onChange={(val) => setForm((f) => ({ ...f, image: val }))} /></Field></div>
             <Field label="Price ($)" required><Input type="number" value={form.price} onChange={set('price')} placeholder="0.00" /></Field>
             <Field label="Original Price ($)"><Input type="number" value={form.originalPrice} onChange={set('originalPrice')} placeholder="Leave blank if no discount" /></Field>
             <Field label="Stock Quantity" required><Input type="number" value={form.stock} onChange={set('stock')} placeholder="0" /></Field>

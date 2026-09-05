@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { IMAGES } from '../data/images';
+import ctaBgImage from '../assets/auth/cinnamon-sticks-powder.jpg';
 
 const CTASection = () => {
     return (
@@ -9,7 +10,7 @@ const CTASection = () => {
             {/* Background */}
             <div className="absolute inset-0">
                 <img
-                    src={IMAGES.cta_bg}
+                    src={ctaBgImage}
                     alt="Ceylon Cinnamon"
                     className="w-full h-full object-cover"
                     loading="lazy"
@@ -24,7 +25,7 @@ const CTASection = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: false }}
                     transition={{ duration: 0.8 }}
                 >
                     {/* Badge */}
