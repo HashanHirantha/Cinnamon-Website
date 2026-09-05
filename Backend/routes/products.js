@@ -1,0 +1,10 @@
+import express from 'express';
+import { getProducts, getProductBySlug, getFeaturedProducts } from '../controllers/productController.js';
+
+const router = express.Router();
+
+router.get('/featured', getFeaturedProducts);
+router.get('/', getProducts);
+router.get('/:slug', getProductBySlug);
+
+export default router;
