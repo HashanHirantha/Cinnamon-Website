@@ -38,7 +38,7 @@ const ProductCard = ({ product }) => {
             transition={{ duration: 0.4 }}
             className="group relative bg-white rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-500"
         >
-            <Link to={`/products/${product.slug}`}>
+            <Link to={`/shop/${product.slug}`}>
                 {/* Image */}
                 <div className="relative overflow-hidden aspect-square bg-cream-100">
                     {!imgLoaded && (
@@ -75,7 +75,7 @@ const ProductCard = ({ product }) => {
                             <Heart className={`w-4 h-4 ${wishlisted ? 'fill-current' : ''}`} />
                         </motion.button>
                         <Link
-                            to={`/products/${product.slug}`}
+                            to={`/shop/${product.slug}`}
                             onClick={(e) => e.stopPropagation()}
                             aria-label="Quick view"
                             className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-gray-600 hover:text-cinnamon-600 shadow-lg transition-all"

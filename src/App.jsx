@@ -23,6 +23,11 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Account from './pages/Account';
 import CeylonCinnamon from './pages/CeylonCinnamon';
+import Shipping from './pages/Shipping';
+import Returns from './pages/Returns';
+import FAQ from './pages/FAQ';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
 import NotFound from './pages/NotFound';
 
 // Admin pages
@@ -88,6 +93,11 @@ const AppRoutes = () => {
                     <Route path="/register" element={<PageWrapper><Register /></PageWrapper>} />
                     <Route path="/account" element={<PageWrapper><Account /></PageWrapper>} />
                     <Route path="/ceylon-cinnamon" element={<PageWrapper><CeylonCinnamon /></PageWrapper>} />
+                    <Route path="/shipping" element={<PageWrapper><Shipping /></PageWrapper>} />
+                    <Route path="/returns" element={<PageWrapper><Returns /></PageWrapper>} />
+                    <Route path="/faq" element={<PageWrapper><FAQ /></PageWrapper>} />
+                    <Route path="/privacy" element={<PageWrapper><Privacy /></PageWrapper>} />
+                    <Route path="/terms" element={<PageWrapper><Terms /></PageWrapper>} />
 
                     {/* Admin routes — completely separated, no Navbar/Footer */}
                     <Route path="/admin/login" element={<AdminLogin />} />
