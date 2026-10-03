@@ -5,6 +5,7 @@ import { ShoppingCart, Search, User, Menu, X, Heart, LogOut } from 'lucide-react
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useAuth } from '../context/AuthContext';
+import CustomLogo from '../assets/logo.svg';
 
 const navLinks = [
     { to: '/', label: 'Home' },
@@ -78,17 +79,20 @@ const Navbar = () => {
             <header
                 className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${navbarBg}`}
             >
-                <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <nav className="w-full px-4 sm:px-8 xl:px-16 mx-auto">
                     <div className="flex items-center justify-between h-16 lg:h-20">
                         {/* Logo */}
                         <Link
                             to="/"
-                            className={`font-serif text-xl sm:text-2xl font-bold tracking-wider transition-colors duration-300 ${logoColor}`}
+                            className={`flex items-center gap-3 font-serif text-2xl font-bold tracking-widest transition-colors duration-300 ${logoColor}`}
                         >
-                            PURE GOLD <span className={scrolled ? 'text-cinnamon-600' : 'text-gold-400'}>Products</span>
-                            <span className={`block text-[10px] font-sans font-normal tracking-[0.2em] uppercase mt-[-4px] transition-colors ${scrolled ? 'text-cinnamon-500' : 'text-white/70'}`}>
-                                Pure Ceylon Cinnamon
-                            </span>
+                            <img src={CustomLogo} alt="Pure Gold Logo" className="h-12 w-auto object-contain drop-shadow-md" />
+                            <div>
+                                PURE GOLD PRODUCTS
+                                <span className={`block text-[10px] font-sans font-normal tracking-[0.2em] uppercase mt-[-4px] transition-colors ${scrolled ? 'text-cinnamon-500' : 'text-white/70'}`}>
+                                    Pure Ceylon Cinnamon
+                                </span>
+                            </div>
                         </Link>
 
                         {/* Desktop nav links */}
@@ -185,6 +189,7 @@ const Navbar = () => {
                                     </motion.span>
                                 )}
                             </Link>
+
                         </div>
 
                         {/* Mobile: cart + hamburger */}

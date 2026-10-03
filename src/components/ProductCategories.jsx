@@ -5,7 +5,7 @@ import { categories } from '../data/categories';
 
 const ProductCategories = () => {
     const ref = useRef(null);
-    const inView = useInView(ref, { once: true, margin: '-80px' });
+    const inView = useInView(ref, { once: false, margin: '-80px' });
 
     return (
         <section ref={ref} className="py-20 lg:py-32 bg-cream-50 overflow-hidden">

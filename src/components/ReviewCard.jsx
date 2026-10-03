@@ -6,7 +6,7 @@ const ReviewCard = ({ review }) => {
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
+            viewport={{ once: false, margin: '-50px' }}
             transition={{ duration: 0.5 }}
             className="bg-white rounded-2xl p-6 shadow-card flex flex-col gap-4 border border-cream-200 hover:shadow-card-hover transition-shadow duration-300"
         >
