@@ -31,7 +31,10 @@
 | Persistence  | `localStorage` (cart, wishlist)                 |
 | Fonts        | Playfair Display, Cormorant Garamond, Inter    |
 | Deployment   | **Firebase Hosting** (planned)                 |
-| Backend      | `/Backend` directory (currently empty, planned) |
+| Backend      | **Node.js + Express** (`/Backend` directory)   |
+| Database     | **Firebase Firestore** (NoSQL)                 |
+| Auth         | **Custom JWT** (customer + admin tokens)       |
+| API Client   | Centralized fetch wrapper (`src/services/api.js`) |
 
 ---
 
@@ -41,21 +44,83 @@
 Cinnamon-Website/
 ├── index.html                  # Entry HTML (SEO meta, Google Fonts, Swiper CSS)
 ├── package.json                # Dependencies & scripts
-├── vite.config.js              # Vite config (port 5173, auto-open)
+├── vite.config.js              # Vite config (port 5173, auto-open, proxy /api → :5000)
 ├── tailwind.config.js          # Custom colors, fonts, animations, shadows
 ├── postcss.config.js           # PostCSS (Tailwind + Autoprefixer)
-├── Backend/                    # 🔲 Future backend (currently empty)
+│
+├── Backend/                    # ✅ Node.js + Express API server
+│   ├── server.js               # Express entry — mounts all routes, CORS, error handlers
+│   ├── package.json            # Backend dependencies (express, firebase-admin, bcryptjs, jsonwebtoken)
+│   ├── .env                    # Environment variables (JWT secrets, port)
+│   ├── config/
+│   │   ├── firebase.js         # Firebase Admin SDK initialization
+│   │   ├── jwt.js              # JWT token generation & verification (customer + admin)
+│   │   └── serviceAccountKey.json # Firebase service account credentials
+│   ├── middleware/
+│   │   ├── auth.js             # Customer JWT auth middleware (authenticateCustomer, optionalCustomerAuth)
+│   │   ├── adminAuth.js        # Admin JWT auth middleware
+│   │   ├── errorHandler.js     # Global error handler + 404 handler
+│   │   └── validate.js         # Request validation middleware
+│   ├── controllers/            # Route handlers for customer-facing APIs
+│   │   ├── authController.js   # Login, register, profile
+│   │   ├── productController.js # List, get by slug, featured products
+│   │   ├── categoryController.js # List categories
+│   │   ├── orderController.js  # Create order, get my orders, track
+│   │   ├── cartController.js   # Get/sync/clear cart
+│   │   ├── wishlistController.js # Get/add/remove wishlist
+│   │   ├── reviewController.js # Get/create reviews
+│   │   └── contactController.js # Contact form submission
+│   ├── controllers/admin/      # Admin-specific CRUD controllers
+│   │   ├── authController.js   # Admin login, profile
+│   │   ├── dashboardController.js # Dashboard stats
+│   │   ├── productController.js # Admin product CRUD + stock adjustment
+│   │   ├── categoryController.js # Admin category CRUD
+│   │   ├── orderController.js  # Admin order management, status updates
+│   │   ├── customerController.js # Customer management
+│   │   ├── reviewController.js # Review moderation
+│   │   ├── couponController.js # Coupon CRUD
+│   │   ├── deliveryController.js # Delivery zone CRUD
+│   │   ├── notificationController.js # Notification management
+│   │   ├── staffController.js  # Staff/admin user CRUD
+│   │   ├── reportController.js # Sales reports
+│   │   └── settingsController.js # App settings
+│   ├── routes/                 # Express route definitions (/api/...)
+│   │   ├── auth.js, products.js, categories.js, orders.js, cart.js, wishlist.js, reviews.js, contact.js
+│   │   └── admin/              # /api/admin/... routes
+│   │       ├── auth.js, dashboard.js, products.js, categories.js, orders.js, customers.js
+│   │       ├── reviews.js, coupons.js, delivery.js, notifications.js, staff.js, reports.js, settings.js
+│   ├── seeds/
+│   │   └── seed.js             # Firestore seeding script (categories, products, admin user, settings)
+│   ├── database/
+│   │   └── schema.sql          # Reference SQL schema (documents Firestore collection structure)
+│   ├── utils/
+│   │   └── apiResponse.js      # Standardized API response helpers (successResponse, errorResponse)
+│   └── services/               # Business logic services (planned)
 │
 ├── src/
 │   ├── main.jsx                # React DOM entry point
 │   ├── App.jsx                 # Root — BrowserRouter, providers, route definitions
 │   ├── index.css               # Global CSS + Tailwind directives
 │   │
+│   ├── services/
+│   │   └── api.js              # Centralized fetch wrapper — all API calls (auth, products, admin, etc.)
+│   │
+│   ├── context/                # React Context providers
+│   │   ├── CartContext.jsx     # Cart state (add, remove, quantity, persist + API sync)
+│   │   ├── WishlistContext.jsx # Wishlist state (localStorage)
+│   │   ├── AuthContext.jsx     # Customer auth (login, register, profile, JWT tokens)
+│   │   └── AdminAuthContext.jsx # Admin auth (admin login, role-based permissions)
+│   │
+│   ├── hooks/
+│   │   └── useProducts.js      # Products hook — fetches from API, falls back to local data
+│   │
 │   ├── components/             # Reusable UI components
-│   │   ├── Navbar.jsx          # Site navigation (responsive, cart badge)
-│   │   ├── Footer.jsx          # Site footer with links & newsletter
-│   │   ├── Hero.jsx            # Homepage hero section
-│   │   ├── ProductCard.jsx     # Product listing card
+│   │   ├── Navbar.jsx          # Site navigation (responsive, cart badge, auth state)
+│   │   ├── Footer.jsx          # Site footer with links & contact info
+│   │   ├── AdminRoute.jsx      # Admin route guard (checks admin JWT)
+│   │   ├── Hero.jsx            # Homepage hero section (slideshow)
+│   │   ├── MorphShowcase.jsx   # Interactive product showcase
+│   │   ├── ProductCard.jsx     # Product listing card (links to /shop/:slug)
 │   │   ├── ProductGrid.jsx     # Grid layout for products
 │   │   ├── ProductShowcase.jsx # Featured product showcase
 │   │   ├── ProductCategories.jsx
@@ -80,20 +145,30 @@ Cinnamon-Website/
 │   │   ├── Shop.jsx            # Product listing (/shop)
 │   │   ├── ProductDetails.jsx  # Single product (/shop/:slug)
 │   │   ├── Cart.jsx            # Shopping cart (/cart)
-│   │   ├── Checkout.jsx        # Checkout form (/checkout)
+│   │   ├── Checkout.jsx        # Checkout form (/checkout) — uses ordersApi
 │   │   ├── About.jsx           # About page (/about)
-│   │   ├── Contact.jsx         # Contact page (/contact)
-│   │   ├── Login.jsx           # Login page (/login)
-│   │   ├── Register.jsx        # Registration page (/register)
+│   │   ├── Contact.jsx         # Contact page (/contact) — uses contactApi
+│   │   ├── Login.jsx           # Unified login/register (/login)
+│   │   ├── Register.jsx        # Redirects to /login
 │   │   ├── Account.jsx         # User account (/account)
 │   │   ├── CeylonCinnamon.jsx  # Info page (/ceylon-cinnamon)
-│   │   └── NotFound.jsx        # 404 page
+│   │   ├── Shipping.jsx        # Shipping info (/shipping)
+│   │   ├── Returns.jsx         # Returns policy (/returns)
+│   │   ├── FAQ.jsx             # FAQ page (/faq)
+│   │   ├── Privacy.jsx         # Privacy policy (/privacy)
+│   │   ├── Terms.jsx           # Terms of service (/terms)
+│   │   ├── NotFound.jsx        # 404 page
+│   │   └── admin/              # Admin panel pages (14 pages)
+│   │       ├── AdminLogin.jsx, AdminDashboard.jsx, Products.jsx, Categories.jsx
+│   │       ├── Inventory.jsx, Orders.jsx, Customers.jsx, Payments.jsx
+│   │       ├── Delivery.jsx, Coupons.jsx, Reviews.jsx, Reports.jsx
+│   │       ├── Notifications.jsx, Staff.jsx, Settings.jsx
 │   │
-│   ├── context/                # React Context providers
-│   │   ├── CartContext.jsx     # Cart state (add, remove, quantity, persist)
-│   │   └── WishlistContext.jsx # Wishlist state
+│   ├── admin/                  # Admin UI components & mock data
+│   │   ├── components/         # AdminLayout, AdminToast, StatsCard, SalesChart, etc.
+│   │   └── data/mockData.js    # Fallback mock data for admin dashboard
 │   │
-│   └── data/                   # Static data (no backend yet)
+│   └── data/                   # Static fallback data (used when backend is offline)
 │       ├── products.js         # 8 product entries with full metadata
 │       ├── categories.js       # 5 product categories
 │       ├── reviews.js          # Customer reviews
@@ -129,22 +204,47 @@ Cinnamon-Website/
 
 ## Routes
 
-| Path               | Page Component   | Auth Layout? |
-| ------------------ | ---------------- | ------------ |
-| `/`                | Home             | No           |
-| `/shop`            | Shop             | No           |
-| `/shop/:slug`      | ProductDetails   | No           |
-| `/cart`            | Cart             | No           |
-| `/checkout`        | Checkout         | No           |
-| `/about`           | About            | No           |
-| `/contact`         | Contact          | No           |
-| `/login`           | Login            | Yes (no nav) |
-| `/register`        | Register         | Yes (no nav) |
-| `/account`         | Account          | No           |
-| `/ceylon-cinnamon` | CeylonCinnamon   | No           |
-| `*`                | NotFound         | No           |
+### Public Routes
+| Path               | Page Component   | Auth Layout? | Backend API |
+| ------------------ | ---------------- | ------------ | ----------- |
+| `/`                | Home             | No           | —           |
+| `/shop`            | Shop             | No           | `GET /api/products` |
+| `/shop/:slug`      | ProductDetails   | No           | `GET /api/products/:slug` |
+| `/cart`            | Cart             | No           | `GET /api/cart` |
+| `/checkout`        | Checkout         | Protected    | `POST /api/orders` |
+| `/about`           | About            | No           | —           |
+| `/contact`         | Contact          | No           | `POST /api/contact` |
+| `/login`           | Login            | Yes (no nav) | `POST /api/auth/login`, `POST /api/auth/register` |
+| `/register`        | Register         | Yes (no nav) | Redirects to `/login` |
+| `/account`         | Account          | No           | `GET /api/auth/me` |
+| `/ceylon-cinnamon` | CeylonCinnamon   | No           | —           |
+| `/shipping`        | Shipping         | No           | —           |
+| `/returns`         | Returns          | No           | —           |
+| `/faq`             | FAQ              | No           | —           |
+| `/privacy`         | Privacy          | No           | —           |
+| `/terms`           | Terms            | No           | —           |
+| `*`                | NotFound         | No           | —           |
 
-> Login and Register pages hide the Navbar and Footer for a clean auth experience.
+### Admin Routes (all wrapped in `<AdminRoute>` — requires admin JWT)
+| Path                    | Page Component    | Backend API |
+| ----------------------- | ----------------- | ----------- |
+| `/admin/login`          | AdminLogin        | `POST /api/admin/auth/login` |
+| `/admin` / `/admin/dashboard` | AdminDashboard | `GET /api/admin/dashboard/stats` |
+| `/admin/products`       | Products          | `/api/admin/products` CRUD |
+| `/admin/categories`     | Categories        | `/api/admin/categories` CRUD |
+| `/admin/inventory`      | Inventory         | `/api/admin/products/:id/stock` |
+| `/admin/orders`         | Orders            | `/api/admin/orders` CRUD |
+| `/admin/customers`      | Customers         | `/api/admin/customers` |
+| `/admin/payments`       | Payments          | `/api/admin/orders/:id/payment` |
+| `/admin/delivery`       | Delivery          | `/api/admin/delivery` CRUD |
+| `/admin/coupons`        | Coupons           | `/api/admin/coupons` CRUD |
+| `/admin/reviews`        | Reviews           | `/api/admin/reviews` |
+| `/admin/reports`        | Reports           | `/api/admin/reports` |
+| `/admin/notifications`  | Notifications     | `/api/admin/notifications` |
+| `/admin/staff`          | Staff             | `/api/admin/staff` CRUD |
+| `/admin/settings`       | Settings          | `/api/admin/settings` |
+
+> Login, Register, and all Admin pages hide the public Navbar and Footer.
 
 ---
 
@@ -153,14 +253,26 @@ Cinnamon-Website/
 ### Cart (`CartContext.jsx`)
 - Uses `useReducer` with actions: `ADD_TO_CART`, `REMOVE_FROM_CART`, `INCREASE_QUANTITY`, `DECREASE_QUANTITY`, `CLEAR_CART`
 - Auto-persisted to `localStorage` under key `ceylone_cart`
+- Syncs to backend via `cartApi.syncCart()` when user is logged in
 - Exposes: `cart`, `cartTotal`, `cartCount`, `addToCart`, `removeFromCart`, `increaseQuantity`, `decreaseQuantity`, `clearCart`
 
+### Auth (`AuthContext.jsx`)
+- Customer auth via JWT — `ceylone_token` in localStorage
+- Validates session on mount via `authApi.getProfile()`
+- Exposes: `user`, `token`, `signIn`, `signUp`, `signOut`, `updateProfile`, `loading`
+- Falls back to local session when backend is offline
+
+### Admin Auth (`AdminAuthContext.jsx`)
+- Admin auth via separate JWT — `ceylone_admin_token` in localStorage
+- Role-based permissions: `superadmin`, `product_manager`, `order_manager`, `customer_support`
+- Exposes: `adminUser`, `adminLogin`, `adminLogout`, `hasPermission`, `isAuthenticated`
+
 ### Wishlist (`WishlistContext.jsx`)
-- Simple context for wishlisted product IDs
+- Simple context for wishlisted product IDs (localStorage only)
 
 ### Provider Hierarchy
 ```
-BrowserRouter → CartProvider → WishlistProvider → ToastProvider → AppRoutes
+BrowserRouter → AdminAuthProvider → AdminToastProvider → AuthProvider → CartProvider → WishlistProvider → ToastProvider → AppRoutes
 ```
 
 ---
@@ -182,9 +294,10 @@ BrowserRouter → CartProvider → WishlistProvider → ToastProvider → AppRou
 - Use Tailwind classes — avoid inline styles or separate CSS modules
 
 ### Data Layer
-- Currently uses static JS files in `src/data/`
+- **API-first with local fallback**: The `useProducts()` hook fetches from the backend API first; if the backend is offline, it falls back to static data in `src/data/`
 - Product data includes: `id`, `slug`, `name`, `shortDescription`, `description`, `category`, `image`, `images`, `price`, `originalPrice`, `weight`, `origin`, `ingredients`, `processing`, `shipping`, `rating`, `reviewCount`, `stock`, `inStock`, `badge`, `featured`, `tags`
-- When backend is added, these will be replaced with API calls
+- Admin product edits attempt API calls first, with localStorage override fallback
+- The frontend proxy (`vite.config.js`) forwards `/api` requests to `http://localhost:5000`
 
 ---
 
@@ -234,20 +347,16 @@ This project is planned to be deployed via **Firebase Hosting**.
   - `PAYHERE_MERCHANT_SECRET`
   - `PAYHERE_API_URL` (sandbox vs production)
 
-### 🔲 Backend Development (`/Backend`)
-- API for products, orders, users, and reviews
-- Authentication (Firebase Auth or custom JWT)
-- Order management system
-- Admin dashboard for inventory and orders
-- Email notifications (order confirmation, shipping updates)
+### ✅ Backend Development (`/Backend`) — COMPLETED
+- **Express.js** REST API with modular routes, controllers, and middleware
+- **Firebase Firestore** database with seed script for categories, products, admin users, and settings
+- **Custom JWT authentication** for both customers and admin users (separate secrets/tokens)
+- **Admin panel** with CRUD for products, categories, orders, customers, reviews, coupons, delivery zones, staff, notifications, reports, and settings
+- **Offline-tolerant frontend**: All API calls have graceful fallbacks so the site works without the backend running
 
 ### 🔲 Future Enhancements
-- User authentication (Firebase Auth)
-- Order history and tracking
-- Product reviews & ratings (user-submitted)
-- Search with filters (price range, rating, origin)
+- Email notifications (order confirmation, shipping updates)
 - Multi-currency support (LKR, USD, EUR, GBP)
-- Inventory management
 - SEO optimization with dynamic meta tags
 - PWA support for mobile
 - Analytics integration (Google Analytics / Firebase Analytics)
@@ -257,12 +366,22 @@ This project is planned to be deployed via **Firebase Hosting**.
 
 ## Scripts
 
+### Frontend (root directory)
 ```bash
 npm run dev       # Start Vite dev server (port 5173, auto-opens browser)
 npm run build     # Production build → dist/
 npm run preview   # Preview production build locally
 npm run lint      # Run ESLint
 ```
+
+### Backend (`/Backend` directory)
+```bash
+npm run dev       # Start Express server with nodemon (port 5000)
+npm start         # Start Express server (production)
+npm run seed      # Seed Firestore database with initial data
+```
+
+> **Full stack dev**: Run both `npm run dev` in the root AND `npm run dev` in `/Backend` simultaneously.
 
 ---
 
@@ -282,18 +401,24 @@ When transitioning to production, replace Unsplash URLs with:
 
 ## Environment Variables
 
-Currently none are required. When backend/payments are added:
-
+### Backend (`/Backend/.env`)
 ```env
-# .env.local (never commit this)
-VITE_FIREBASE_API_KEY=
-VITE_FIREBASE_AUTH_DOMAIN=
-VITE_FIREBASE_PROJECT_ID=
-VITE_FIREBASE_STORAGE_BUCKET=
-VITE_FIREBASE_MESSAGING_SENDER_ID=
-VITE_FIREBASE_APP_ID=
+PORT=5000
+JWT_SECRET=<your-jwt-secret>
+JWT_ADMIN_SECRET=<your-admin-jwt-secret>
+JWT_EXPIRES_IN=7d
+JWT_ADMIN_EXPIRES_IN=12h
+FIREBASE_PROJECT_ID=<your-firebase-project-id>
+# Firebase Admin SDK uses serviceAccountKey.json in /Backend/config/
+```
+
+### Frontend (`/.env.local` — optional)
+```env
+VITE_API_URL=            # Defaults to /api (proxied via vite.config.js)
 VITE_PAYHERE_MERCHANT_ID=
 VITE_PAYHERE_API_URL=
 ```
 
 > All client-exposed env vars in Vite must be prefixed with `VITE_`.
+> Backend env vars are in `/Backend/.env` and should never be committed.
+> Firebase Admin credentials are loaded from `/Backend/config/serviceAccountKey.json`.
