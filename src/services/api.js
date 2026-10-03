@@ -3,6 +3,22 @@
 const BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 /**
+ * Ensure a persistent guest ID exists for cart tracking
+ */
+export function getGuestId() {
+  try {
+    let guestId = localStorage.getItem('ceylone_guest_id');
+    if (!guestId) {
+      guestId = 'guest_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 9);
+      localStorage.setItem('ceylone_guest_id', guestId);
+    }
+    return guestId;
+  } catch {
+    return 'guest_fallback_' + Date.now();
+  }
+}
+
+/**
  * Standard fetch wrapper with auth header injection & error handling
  */
 async function request(endpoint, options = {}) {
@@ -19,6 +35,11 @@ async function request(endpoint, options = {}) {
 
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  // Attach guest ID for non-admin cart and session operations
+  if (!isAdminRequest) {
+    headers['x-guest-id'] = getGuestId();
   }
 
   const config = {
@@ -93,9 +114,10 @@ export const reviewsApi = {
 
 // ─── Cart & Wishlist APIs ──────────────────────────────────────────────────────
 export const cartApi = {
-  getCart: () => api.get('/cart'),
-  syncCart: (cart) => api.put('/cart/sync', { cart }),
-  clearCart: () => api.delete('/cart'),
+  getCart: (guestId) => api.get('/cart', { guestId: guestId || getGuestId() }),
+  syncCart: (cart, guestId) => api.put('/cart/sync', { cart, guestId: guestId || getGuestId() }),
+  clearCart: (guestId) => api.delete('/cart'),
+  mergeCart: (guestId) => api.post('/cart/merge', { guestId: guestId || getGuestId() }),
 };
 
 export const wishlistApi = {

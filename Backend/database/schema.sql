@@ -185,6 +185,19 @@ CREATE TABLE IF NOT EXISTS settings (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- 12. CARTS TABLE (Shopping Cart Bucket)
+CREATE TABLE IF NOT EXISTS carts (
+    id VARCHAR(100) PRIMARY KEY, -- 'user_<id>' or 'guest_<id>'
+    user_id VARCHAR(50) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    guest_id VARCHAR(100),
+    items JSON NOT NULL, -- Array of items: [{id, productId, name, price, quantity, image, slug, weight, total}]
+    item_count INT DEFAULT 0 NOT NULL,
+    subtotal DECIMAL(10, 2) DEFAULT 0.00 NOT NULL,
+    status VARCHAR(30) DEFAULT 'active', -- 'active', 'converted', 'abandoned', 'cleared'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- ====================================================================
 -- INDEXES FOR OPTIMAL QUERY PERFORMANCE
 -- ====================================================================
@@ -196,3 +209,5 @@ CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(order_status);
 CREATE INDEX IF NOT EXISTS idx_reviews_product ON reviews(product_id);
 CREATE INDEX IF NOT EXISTS idx_reviews_status ON reviews(status);
 CREATE INDEX IF NOT EXISTS idx_coupons_code ON coupons(code);
+CREATE INDEX IF NOT EXISTS idx_carts_user ON carts(user_id);
+CREATE INDEX IF NOT EXISTS idx_carts_guest ON carts(guest_id);

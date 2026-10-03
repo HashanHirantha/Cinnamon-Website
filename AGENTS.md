@@ -251,9 +251,13 @@ Cinnamon-Website/
 ## State Management
 
 ### Cart (`CartContext.jsx`)
-- Uses `useReducer` with actions: `ADD_TO_CART`, `REMOVE_FROM_CART`, `INCREASE_QUANTITY`, `DECREASE_QUANTITY`, `CLEAR_CART`
+- Uses `useReducer` with actions: `SET_CART`, `ADD_TO_CART`, `REMOVE_FROM_CART`, `INCREASE_QUANTITY`, `DECREASE_QUANTITY`, `CLEAR_CART`
 - Auto-persisted to `localStorage` under key `ceylone_cart`
-- Syncs to backend via `cartApi.syncCart()` when user is logged in
+- **Database Bucket (`carts` collection in Firestore)**:
+  - Every cart update is immediately saved to the Firestore `carts` collection (`user_<userId>` for authenticated users, `guest_<guestId>` for guest shoppers).
+  - Maintains `items`, `itemCount`, `subtotal`, and `status`.
+  - Automatically merges guest cart into user account cart upon login via `/api/cart/merge`.
+  - Cleared in database bucket upon order placement.
 - Exposes: `cart`, `cartTotal`, `cartCount`, `addToCart`, `removeFromCart`, `increaseQuantity`, `decreaseQuantity`, `clearCart`
 
 ### Auth (`AuthContext.jsx`)

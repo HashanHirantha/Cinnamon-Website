@@ -138,9 +138,29 @@ export const createOrder = async (req, res, next) => {
       }
     }
 
-    // Clear server cart if user was logged in
+    // Clear cart in 'carts' collection and users table
     if (req.user) {
-      await updateDocument('users', req.user.id, { cart: [] });
+      await updateDocument('users', req.user.id, { cart: [] }).catch(() => {});
+      await db.collection('carts').doc(`user_${req.user.id}`).set({
+        items: [],
+        itemCount: 0,
+        subtotal: 0,
+        status: 'converted',
+        lastOrderId: orderId,
+        updatedAt: new Date().toISOString(),
+      }, { merge: true }).catch(() => {});
+    }
+
+    const guestCartId = (req.body.guestId || req.headers['x-guest-id'] || '').replace(/^guest_/, '');
+    if (guestCartId) {
+      await db.collection('carts').doc(`guest_${guestCartId}`).set({
+        items: [],
+        itemCount: 0,
+        subtotal: 0,
+        status: 'converted',
+        lastOrderId: orderId,
+        updatedAt: new Date().toISOString(),
+      }, { merge: true }).catch(() => {});
     }
 
     // Create an admin notification for the new order

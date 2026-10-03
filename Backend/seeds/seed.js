@@ -794,6 +794,62 @@ const seedDatabase = async () => {
     }
     console.log(`✅ ${notifications.length} admin notifications seeded.`);
 
+    // 12. Seed Carts Bucket / Collection
+    console.log('🛒 Seeding active carts bucket...');
+    const carts = [
+      {
+        id: 'user_usr-customer-01',
+        userId: 'usr-customer-01',
+        guestId: null,
+        items: [
+          {
+            id: 'ceylon-cinnamon-quills-premium',
+            productId: 'ceylon-cinnamon-quills-premium',
+            name: 'Ceylon Cinnamon Quills — Premium Grade',
+            price: 18.99,
+            quantity: 1,
+            image: 'https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=600&q=80',
+            slug: 'ceylon-cinnamon-quills-premium',
+            weight: '100g',
+            total: 18.99,
+          },
+        ],
+        itemCount: 1,
+        subtotal: 18.99,
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: 'guest_sample_shopper',
+        userId: null,
+        guestId: 'sample_shopper',
+        items: [
+          {
+            id: 'cinnamon-herbal-tea',
+            productId: 'cinnamon-herbal-tea',
+            name: 'Cinnamon Herbal Tea — Loose Leaf',
+            price: 14.99,
+            quantity: 2,
+            image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80',
+            slug: 'cinnamon-herbal-tea',
+            weight: '75g',
+            total: 29.98,
+          },
+        ],
+        itemCount: 2,
+        subtotal: 29.98,
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    ];
+
+    for (const cart of carts) {
+      await db.collection('carts').doc(cart.id).set(cart, { merge: true });
+    }
+    console.log(`✅ ${carts.length} carts seeded into database 'carts' collection.`);
+
     console.log('\n🎉 Seed process completed successfully!');
     process.exit(0);
   } catch (error) {

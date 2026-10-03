@@ -337,6 +337,40 @@ export const SCHEMAS = {
       updatedAt: { type: 'string (ISO date)', required: true },
     },
   },
+
+  /**
+   * 12. CARTS TABLE / COLLECTION (Bucket for Shopping Carts)
+   * Active user and guest shopping carts, persisted in database
+   */
+  carts: {
+    tableName: 'carts',
+    description: 'Active shopping carts for both logged-in users and guest sessions',
+    fields: {
+      id: { type: 'string', required: true, example: 'user_usr-1001 or guest_uuid', description: 'Cart bucket identifier' },
+      userId: { type: 'string | null (foreign key -> users.id)', required: false, example: 'usr-1001' },
+      guestId: { type: 'string | null', required: false, example: 'guest_shopper_uuid' },
+      items: {
+        type: 'array of objects',
+        required: true,
+        properties: {
+          id: { type: 'string', required: true, example: 'ceylon-cinnamon-quills-premium' },
+          productId: { type: 'string', required: true, example: 'ceylon-cinnamon-quills-premium' },
+          name: { type: 'string', required: true, example: 'Ceylon Cinnamon Quills — Premium Grade' },
+          price: { type: 'number', required: true, example: 18.99 },
+          quantity: { type: 'number', required: true, min: 1, example: 2 },
+          image: { type: 'string', required: false },
+          slug: { type: 'string', required: false },
+          weight: { type: 'string', required: false, example: '100g' },
+          total: { type: 'number', required: true, example: 37.98 },
+        },
+      },
+      itemCount: { type: 'number', required: true, default: 0, example: 2 },
+      subtotal: { type: 'number', required: true, default: 0, example: 37.98 },
+      status: { type: 'string (enum)', enum: ['active', 'converted', 'abandoned', 'cleared'], default: 'active' },
+      createdAt: { type: 'string (ISO date)', required: true },
+      updatedAt: { type: 'string (ISO date)', required: true },
+    },
+  },
 };
 
 export default SCHEMAS;
